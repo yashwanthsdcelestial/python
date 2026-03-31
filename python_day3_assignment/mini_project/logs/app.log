@@ -1,0 +1,692 @@
+2025-03-24 14:00:00,123 - root - INFO - Database configured with connection pooling (pool_size=5, pool_pre_ping=True)
+2025-03-24 14:00:01,456 - database - INFO - SQLAlchemy engine created for PostgreSQL
+2025-03-24 14:00:02,789 - database - INFO - Database tables initialized
+2025-03-24 14:00:03,012 - main - INFO - TaskAPI started | Debug: true
+2025-03-24 14:15:32,345 - middleware - INFO - POST /users/register | 201 | 15ms
+2025-03-24 14:15:33,678 - services.user_service - INFO - User 'alice' registered successfully
+2025-03-24 14:15:35,901 - middleware - INFO - POST /users/register | 201 | 12ms
+2025-03-24 14:15:36,234 - services.user_service - INFO - User 'bob' registered successfully
+2025-03-24 14:16:00,567 - middleware - INFO - POST /tasks | 201 | 18ms
+2025-03-24 14:16:01,890 - services.task_service - INFO - Task 'Complete project report' created for alice
+2025-03-24 14:16:02,123 - utils.background_tasks - INFO - Notification logged for task: Complete project report by alice
+2025-03-24 14:16:30,456 - middleware - INFO - POST /tasks | 201 | 22ms
+2025-03-24 14:16:31,789 - services.task_service - INFO - Task 'Review code changes' created by bob
+2025-03-24 14:16:32,012 - utils.background_tasks - INFO - Notification logged for task: Review code changes by bob
+2025-03-24 14:17:00,345 - middleware - INFO - GET /tasks | 200 | 8ms
+2025-03-24 14:17:01,678 - services.task_service - INFO - Listed 2 tasks (page 1)
+2025-03-24 14:17:30,901 - middleware - INFO - GET /tasks/1 | 200 | 5ms
+2025-03-24 14:18:00,234 - middleware - INFO - PUT /tasks/1 | 200 | 12ms
+2025-03-24 14:18:01,567 - services.task_service - INFO - Task ID 1 updated
+2025-03-24 14:18:30,890 - middleware - INFO - GET /users | 200 | 6ms
+2025-03-24 14:19:00,123 - middleware - INFO - DELETE /tasks/2 | 200 | 9ms
+2025-03-24 14:19:01,456 - services.task_service - INFO - Task ID 2 deleted
+2025-03-24 14:19:30,789 - middleware - INFO - GET /health | 200 | 1ms
+2025-03-24 14:20:00,012 - main - INFO - TaskAPI shutdown
+
+[2026-03-23 18:53:07] - INFO - middleware.logging_middleware - GET /users | 200 | 3ms
+[2026-03-23 18:54:54] - INFO - middleware.logging_middleware - POST /users/register | 422 | 3ms
+[2026-03-23 18:55:16] - INFO - repositories.json_repository - Saved users with ID 3
+[2026-03-23 18:55:16] - INFO - services.user_service - User 'alex' registered successfully
+[2026-03-23 18:55:16] - INFO - middleware.logging_middleware - POST /users/register | 201 | 7ms
+[2026-03-23 18:56:32] - INFO - services.user_service - User 'alex' logged in successfully
+[2026-03-23 18:56:32] - INFO - middleware.logging_middleware - POST /users/login | 200 | 6ms
+[2026-03-23 20:57:51] - INFO - middleware.logging_middleware - GET /docs | 200 | 0ms
+[2026-03-23 20:57:51] - INFO - middleware.logging_middleware - GET /openapi.json | 200 | 1ms
+[2026-03-23 20:59:34] - INFO - routers.user_router - Listed 3 users
+[2026-03-23 20:59:34] - INFO - middleware.logging_middleware - GET /users | 200 | 5ms
+[2026-03-23 20:59:59] - INFO - repositories.json_repository - Saved tasks with ID 4
+[2026-03-23 20:59:59] - INFO - services.task_service - Task 'Fix login bug' created for alice
+[2026-03-23 20:59:59] - INFO - middleware.logging_middleware - POST /tasks | 201 | 34ms
+[2026-03-23 21:02:23] - INFO - services.task_service - Listed 2 tasks (page 1)
+[2026-03-23 21:02:23] - INFO - middleware.logging_middleware - GET /tasks | 200 | 9ms
+[2026-03-23 21:03:26] - INFO - middleware.logging_middleware - GET /tasks/4 | 200 | 7ms
+[2026-03-23 21:04:03] - INFO - repositories.json_repository - Updated tasks with ID 4
+[2026-03-23 21:04:03] - INFO - services.task_service - Task ID 4 updated
+[2026-03-23 21:04:03] - INFO - middleware.logging_middleware - PUT /tasks/4 | 200 | 20ms
+[2026-03-23 21:04:52] - INFO - services.task_service - Listed 1 tasks (page 1)
+[2026-03-23 21:04:52] - INFO - middleware.logging_middleware - GET /tasks | 200 | 6ms
+[2026-03-23 21:05:27] - INFO - repositories.json_repository - Saved tasks with ID 5
+[2026-03-23 21:05:27] - INFO - services.task_service - Task 'Fix login bug' created for alice
+[2026-03-23 21:05:27] - INFO - middleware.logging_middleware - POST /tasks | 201 | 16ms
+[2026-03-23 21:05:36] - INFO - services.task_service - Listed 2 tasks (page 1)
+[2026-03-23 21:05:36] - INFO - middleware.logging_middleware - GET /tasks | 200 | 8ms
+[2026-03-23 21:06:53] - INFO - repositories.json_repository - Updated tasks with ID 5
+[2026-03-23 21:06:53] - INFO - services.task_service - Task ID 5 updated
+[2026-03-23 21:06:53] - INFO - middleware.logging_middleware - PUT /tasks/5 | 200 | 12ms
+[2026-03-23 21:07:14] - INFO - services.task_service - Listed 1 tasks (page 1)
+[2026-03-23 21:07:14] - INFO - middleware.logging_middleware - GET /tasks | 200 | 8ms
+[2026-03-23 21:07:24] - INFO - services.task_service - Listed 2 tasks (page 1)
+[2026-03-23 21:07:24] - INFO - middleware.logging_middleware - GET /tasks | 200 | 6ms
+[2026-03-23 21:10:17] - INFO - repositories.json_repository - Updated tasks with ID 5
+[2026-03-23 21:10:17] - INFO - services.task_service - Task ID 5 updated
+[2026-03-23 21:10:17] - INFO - middleware.logging_middleware - PATCH /tasks/5 | 200 | 14ms
+[2026-03-23 21:11:04] - INFO - repositories.json_repository - Deleted tasks with ID 5
+[2026-03-23 21:11:04] - INFO - services.task_service - Task ID 5 deleted
+[2026-03-23 21:11:04] - INFO - middleware.logging_middleware - DELETE /tasks/5 | 200 | 20ms
+[2026-03-23 21:11:25] - INFO - middleware.logging_middleware - GET /health | 200 | 3ms
+[2026-03-23 21:11:44] - INFO - middleware.logging_middleware - GET / | 200 | 8ms
+[2026-03-23 22:31:04] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-23 22:33:16] - INFO - middleware.logging_middleware - GET /docs | 200 | 0ms
+[2026-03-23 22:33:16] - INFO - middleware.logging_middleware - GET /openapi.json | 200 | 35ms
+[2026-03-23 22:34:25] - INFO - main - 🛑 TaskAPI shutdown
+[2026-03-23 22:35:02] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-23 22:35:43] - INFO - middleware.logging_middleware - GET /docs | 200 | 1ms
+[2026-03-23 22:35:43] - INFO - middleware.logging_middleware - GET /openapi.json | 200 | 53ms
+[2026-03-23 22:41:49] - INFO - main - 🛑 TaskAPI shutdown
+[2026-03-24 08:51:41] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-24 08:52:24] - INFO - middleware.logging_middleware - GET /docs | 200 | 1ms
+[2026-03-24 08:52:24] - INFO - middleware.logging_middleware - GET /openapi.json | 200 | 103ms
+[2026-03-24 08:52:32] - INFO - middleware.logging_middleware - GET /docs | 200 | 1ms
+[2026-03-24 08:52:32] - INFO - middleware.logging_middleware - GET /openapi.json | 200 | 3ms
+[2026-03-24 10:10:19] - INFO - main - 🛑 TaskAPI shutdown
+2026-03-25 07:44:43 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 07:45:52 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 07:45:54 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 07:46:21 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:00:24 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:00:25 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:00:29 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:00:29 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:00:32 - database - INFO - Database tables initialized
+2026-03-25 08:00:32 - database - INFO - Database tables initialized
+2026-03-25 08:00:47 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:00:47 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:00:49 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:00:49 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:00:52 - database - INFO - Database tables initialized
+2026-03-25 08:00:52 - database - INFO - Database tables initialized
+2026-03-25 08:02:19 - repositories.sqlalchemy_repository - ERROR - Error finding all User: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:02:19 - database - ERROR - Database error: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:04:10 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:04:14 - database - INFO - Database tables initialized
+2026-03-25 08:04:45 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:04:52 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:04:56 - database - INFO - Database tables initialized
+2026-03-25 08:05:45 - repositories.sqlalchemy_repository - ERROR - Error finding all User: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:05:45 - database - ERROR - Database error: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:07:14 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:07:18 - database - INFO - Database tables initialized
+2026-03-25 08:07:43 - repositories.sqlalchemy_repository - ERROR - Error finding all User: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:07:43 - database - ERROR - Database error: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:14:52 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:14:55 - database - INFO - Database tables initialized
+2026-03-25 08:15:51 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:16:00 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:16:04 - database - INFO - Database tables initialized
+2026-03-25 08:16:39 - repositories.sqlalchemy_repository - ERROR - Error finding all User: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:16:39 - database - ERROR - Database error: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:18:32 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:18:35 - database - INFO - Database tables initialized
+2026-03-25 08:19:21 - repositories.sqlalchemy_repository - ERROR - Error finding all User: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:19:21 - database - ERROR - Database error: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:20:05 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:20:13 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:20:17 - database - INFO - Database tables initialized
+2026-03-25 08:20:43 - repositories.sqlalchemy_repository - ERROR - Error finding all User: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:20:43 - database - ERROR - Database error: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:23:20 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:23:24 - database - INFO - Database tables initialized
+2026-03-25 08:23:59 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:24:08 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:24:11 - database - INFO - Database tables initialized
+2026-03-25 08:24:39 - repositories.sqlalchemy_repository - ERROR - Error finding all User: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:24:39 - database - ERROR - Database error: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:25:40 - database - INFO - Database tables initialized
+2026-03-25 08:26:12 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:26:23 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:26:26 - database - INFO - Database tables initialized
+2026-03-25 08:27:01 - repositories.sqlalchemy_repository - ERROR - Error finding all User: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:27:01 - database - ERROR - Database error: (psycopg2.errors.UndefinedColumn) column users.username does not exist
+LINE 1: SELECT users.id AS users_id, users.username AS users_usernam...
+                                     ^
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.created_at AS users_created_at 
+FROM users ORDER BY users.id DESC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:28:16 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:28:17 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:28:17 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:28:17 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:28:18 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:28:19 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:28:19 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:28:23 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:28:23 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:28:24 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:28:24 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:28:24 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:28:24 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:28:28 - database - INFO - Database tables initialized
+2026-03-25 08:28:28 - database - ERROR - Failed to initialize database: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(taskstatus, 2200) already exists.
+
+[SQL: CREATE TYPE taskstatus AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-03-25 08:28:28 - database - ERROR - Failed to initialize database: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(taskstatus, 2200) already exists.
+
+[SQL: CREATE TYPE taskstatus AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-03-25 08:28:28 - main - ERROR - Failed to initialize database: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(taskstatus, 2200) already exists.
+
+[SQL: CREATE TYPE taskstatus AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-03-25 08:28:28 - database - ERROR - Failed to initialize database: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(taskstatus, 2200) already exists.
+
+[SQL: CREATE TYPE taskstatus AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-03-25 08:28:28 - main - ERROR - Failed to initialize database: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(taskstatus, 2200) already exists.
+
+[SQL: CREATE TYPE taskstatus AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-03-25 08:28:28 - main - ERROR - Failed to initialize database: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(taskstatus, 2200) already exists.
+
+[SQL: CREATE TYPE taskstatus AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-03-25 08:28:28 - database - ERROR - Failed to initialize database: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(taskstatus, 2200) already exists.
+
+[SQL: CREATE TYPE taskstatus AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-03-25 08:28:28 - main - ERROR - Failed to initialize database: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(taskstatus, 2200) already exists.
+
+[SQL: CREATE TYPE taskstatus AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-03-25 08:28:28 - database - ERROR - Failed to initialize database: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(taskstatus, 2200) already exists.
+
+[SQL: CREATE TYPE taskstatus AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-03-25 08:28:28 - main - ERROR - Failed to initialize database: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(taskstatus, 2200) already exists.
+
+[SQL: CREATE TYPE taskstatus AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-03-25 08:28:28 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:28:28 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:28:28 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:28:29 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:28:29 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:28:29 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:28:33 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:28:33 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:28:34 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:28:34 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:28:34 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:28:34 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:28:34 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:28:36 - database - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:28:36 - main - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:28:36 - database - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:28:36 - main - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:28:36 - database - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "users" does not exist
+
+[SQL: 
+DROP TABLE users]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:28:36 - main - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "users" does not exist
+
+[SQL: 
+DROP TABLE users]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:28:38 - database - INFO - Database tables initialized
+2026-03-25 08:28:38 - database - ERROR - Failed to initialize database: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(taskstatus, 2200) already exists.
+
+[SQL: CREATE TYPE taskstatus AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-03-25 08:28:38 - database - ERROR - Failed to initialize database: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(taskstatus, 2200) already exists.
+
+[SQL: CREATE TYPE taskstatus AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-03-25 08:28:38 - main - ERROR - Failed to initialize database: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(taskstatus, 2200) already exists.
+
+[SQL: CREATE TYPE taskstatus AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-03-25 08:28:38 - main - ERROR - Failed to initialize database: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+DETAIL:  Key (typname, typnamespace)=(taskstatus, 2200) already exists.
+
+[SQL: CREATE TYPE taskstatus AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-03-25 08:29:00 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:29:07 - database - INFO - Database tables initialized
+2026-03-25 08:30:46 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:30:47 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:30:48 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:30:48 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:30:48 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:30:48 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:30:49 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:30:49 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:30:56 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:30:56 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:30:56 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:30:56 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:30:56 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:30:56 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:30:56 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:30:56 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:30:59 - database - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:30:59 - database - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:30:59 - database - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:30:59 - main - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:30:59 - database - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:30:59 - database - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:30:59 - database - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:30:59 - main - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:30:59 - main - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:30:59 - main - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:30:59 - main - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:30:59 - main - ERROR - Failed to initialize database: (psycopg2.errors.UndefinedTable) table "tasks" does not exist
+
+[SQL: 
+DROP TABLE tasks]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-25 08:30:59 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:31:02 - database - INFO - Database tables initialized
+2026-03-25 08:31:09 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:31:17 - database - INFO - Database tables initialized
+2026-03-25 08:36:27 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:36:27 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:36:27 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:36:27 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:36:27 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:36:29 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:36:29 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:36:35 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:36:35 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:36:35 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:36:35 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:36:35 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:36:35 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:36:35 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:36:35 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:36:38 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 08:36:46 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 08:37:08 - repositories.sqlalchemy_repository - INFO - Saved User with ID 1
+2026-03-25 08:37:08 - services.user_service - INFO - User 'strin1g' registered successfully
+2026-03-25 08:38:37 - repositories.sqlalchemy_repository - INFO - Saved User with ID 2
+2026-03-25 08:38:37 - services.user_service - INFO - User 'rocky' registered successfully
+2026-03-25 08:39:01 - services.user_service - INFO - User 'rocky' logged in successfully
+2026-03-25 08:39:35 - routers.user_router - INFO - Listed 2 users
+2026-03-25 08:40:32 - repositories.sqlalchemy_repository - INFO - Saved Task with ID 1
+2026-03-25 08:40:32 - services.task_service - INFO - Task 'string11' created for string11
+2026-03-25 08:40:33 - utils.background_tasks - INFO - Notification logged for task: string11 by string11
+2026-03-25 08:41:04 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 09:03:57 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 09:06:06 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 09:06:10 - repositories.sqlalchemy_repository - INFO - Saved User with ID 3
+2026-03-25 09:06:10 - services.user_service - INFO - User 'taskowner' registered successfully
+2026-03-25 09:06:10 - middleware.logging_middleware - INFO - ✅ POST /users/register | Status: 201 | Time: 4.694s
+2026-03-25 09:06:10 - middleware.logging_middleware - INFO - 📨 POST /tasks | Params: {}
+2026-03-25 09:06:12 - repositories.sqlalchemy_repository - INFO - Saved Task with ID 2
+2026-03-25 09:06:12 - services.task_service - INFO - Task 'Write report' created for taskowner
+2026-03-25 09:06:12 - middleware.logging_middleware - INFO - ✅ POST /tasks | Status: 201 | Time: 1.421s
+2026-03-25 09:06:12 - utils.background_tasks - INFO - Notification logged for task: Write report by taskowner
+2026-03-25 09:06:12 - middleware.logging_middleware - INFO - 📨 POST /tasks | Params: {}
+2026-03-25 09:06:12 - database - ERROR - Database error: 1 validation error:
+  {'type': 'string_too_short', 'loc': ('body', 'title'), 'msg': 'String should have at least 3 characters', 'input': 'ab', 'ctx': {'min_length': 3}}
+
+  File "C:\Users\yashwanth.sd\day_3_mini_project3\routers\task_router.py", line 29, in create_task
+    POST /tasks
+2026-03-25 09:06:12 - middleware.logging_middleware - INFO - ⚠️ POST /tasks | Status: 422 | Time: 0.020s
+2026-03-25 09:06:12 - middleware.logging_middleware - INFO - 📨 POST /tasks | Params: {}
+2026-03-25 09:06:14 - repositories.sqlalchemy_repository - INFO - Saved Task with ID 3
+2026-03-25 09:06:14 - services.task_service - INFO - Task 'Task 0' created for taskowner
+2026-03-25 09:06:14 - middleware.logging_middleware - INFO - ✅ POST /tasks | Status: 201 | Time: 1.355s
+2026-03-25 09:06:14 - utils.background_tasks - INFO - Notification logged for task: Task 0 by taskowner
+2026-03-25 09:06:14 - middleware.logging_middleware - INFO - 📨 POST /tasks | Params: {}
+2026-03-25 09:06:15 - repositories.sqlalchemy_repository - INFO - Saved Task with ID 4
+2026-03-25 09:06:15 - services.task_service - INFO - Task 'Task 1' created for taskowner
+2026-03-25 09:06:15 - middleware.logging_middleware - INFO - ✅ POST /tasks | Status: 201 | Time: 1.117s
+2026-03-25 09:06:15 - utils.background_tasks - INFO - Notification logged for task: Task 1 by taskowner
+2026-03-25 09:06:15 - middleware.logging_middleware - INFO - 📨 POST /tasks | Params: {}
+2026-03-25 09:06:16 - repositories.sqlalchemy_repository - INFO - Saved Task with ID 5
+2026-03-25 09:06:16 - services.task_service - INFO - Task 'Task 2' created for taskowner
+2026-03-25 09:06:16 - middleware.logging_middleware - INFO - ✅ POST /tasks | Status: 201 | Time: 1.292s
+2026-03-25 09:06:16 - utils.background_tasks - INFO - Notification logged for task: Task 2 by taskowner
+2026-03-25 09:06:17 - middleware.logging_middleware - INFO - 📨 GET /tasks | Params: {}
+2026-03-25 09:06:17 - services.task_service - INFO - Listed 5 tasks (page 1)
+2026-03-25 09:06:17 - middleware.logging_middleware - INFO - ✅ GET /tasks | Status: 200 | Time: 0.606s
+2026-03-25 09:06:18 - middleware.logging_middleware - INFO - 📨 POST /tasks | Params: {}
+2026-03-25 09:06:19 - repositories.sqlalchemy_repository - INFO - Saved Task with ID 6
+2026-03-25 09:06:19 - services.task_service - INFO - Task 'High priority task' created for taskowner
+2026-03-25 09:06:19 - middleware.logging_middleware - INFO - ✅ POST /tasks | Status: 201 | Time: 1.420s
+2026-03-25 09:06:19 - utils.background_tasks - INFO - Notification logged for task: High priority task by taskowner
+2026-03-25 09:06:19 - middleware.logging_middleware - INFO - 📨 POST /tasks | Params: {}
+2026-03-25 09:06:21 - repositories.sqlalchemy_repository - INFO - Saved Task with ID 7
+2026-03-25 09:06:21 - services.task_service - INFO - Task 'Low priority task' created for taskowner
+2026-03-25 09:06:21 - middleware.logging_middleware - INFO - ✅ POST /tasks | Status: 201 | Time: 1.404s
+2026-03-25 09:06:21 - utils.background_tasks - INFO - Notification logged for task: Low priority task by taskowner
+2026-03-25 09:06:21 - middleware.logging_middleware - INFO - 📨 GET /tasks | Params: {'priority': 'high'}
+2026-03-25 09:06:22 - services.task_service - INFO - Listed 2 tasks (page 1)
+2026-03-25 09:06:22 - middleware.logging_middleware - INFO - ✅ GET /tasks | Status: 200 | Time: 0.515s
+2026-03-25 09:06:22 - middleware.logging_middleware - INFO - 📨 POST /tasks | Params: {}
+2026-03-25 09:06:23 - repositories.sqlalchemy_repository - INFO - Saved Task with ID 8
+2026-03-25 09:06:23 - services.task_service - INFO - Task 'Original title' created for taskowner
+2026-03-25 09:06:23 - middleware.logging_middleware - INFO - ✅ POST /tasks | Status: 201 | Time: 1.297s
+2026-03-25 09:06:23 - utils.background_tasks - INFO - Notification logged for task: Original title by taskowner
+2026-03-25 09:06:23 - middleware.logging_middleware - INFO - 📨 PUT /tasks/8 | Params: {}
+2026-03-25 09:06:25 - repositories.sqlalchemy_repository - INFO - Updated Task with ID 8
+2026-03-25 09:06:25 - services.task_service - INFO - Task ID 8 updated
+2026-03-25 09:06:25 - middleware.logging_middleware - INFO - ✅ PUT /tasks/8 | Status: 200 | Time: 1.736s
+2026-03-25 09:06:25 - middleware.logging_middleware - INFO - 📨 POST /tasks | Params: {}
+2026-03-25 09:06:26 - repositories.sqlalchemy_repository - INFO - Saved Task with ID 9
+2026-03-25 09:06:26 - services.task_service - INFO - Task 'Original title' created for taskowner
+2026-03-25 09:06:26 - middleware.logging_middleware - INFO - ✅ POST /tasks | Status: 201 | Time: 1.216s
+2026-03-25 09:06:26 - utils.background_tasks - INFO - Notification logged for task: Original title by taskowner
+2026-03-25 09:06:27 - middleware.logging_middleware - INFO - 📨 PATCH /tasks/9 | Params: {}
+2026-03-25 09:06:28 - repositories.sqlalchemy_repository - INFO - Updated Task with ID 9
+2026-03-25 09:06:28 - services.task_service - INFO - Task ID 9 updated
+2026-03-25 09:06:28 - middleware.logging_middleware - INFO - ✅ PATCH /tasks/9 | Status: 200 | Time: 1.730s
+2026-03-25 09:06:29 - middleware.logging_middleware - INFO - 📨 POST /tasks | Params: {}
+2026-03-25 09:06:30 - repositories.sqlalchemy_repository - INFO - Saved Task with ID 10
+2026-03-25 09:06:30 - services.task_service - INFO - Task 'Task to delete' created for taskowner
+2026-03-25 09:06:30 - middleware.logging_middleware - INFO - ✅ POST /tasks | Status: 201 | Time: 1.287s
+2026-03-25 09:06:30 - utils.background_tasks - INFO - Notification logged for task: Task to delete by taskowner
+2026-03-25 09:06:30 - middleware.logging_middleware - INFO - 📨 DELETE /tasks/10 | Params: {}
+2026-03-25 09:06:31 - repositories.sqlalchemy_repository - INFO - Deleted Task with ID 10
+2026-03-25 09:06:31 - services.task_service - INFO - Task ID 10 deleted
+2026-03-25 09:06:31 - middleware.logging_middleware - INFO - ✅ DELETE /tasks/10 | Status: 200 | Time: 1.001s
+2026-03-25 09:06:31 - middleware.logging_middleware - INFO - 📨 GET /tasks/10 | Params: {}
+2026-03-25 09:06:32 - services.task_service - ERROR - Task ID 10 not found
+2026-03-25 09:06:32 - routers.task_router - ERROR - Error getting task: Task with ID 10 not found
+2026-03-25 09:06:32 - database - ERROR - Database error: 404: Task with ID 10 not found
+2026-03-25 09:06:32 - middleware.logging_middleware - INFO - ⚠️ GET /tasks/10 | Status: 404 | Time: 0.707s
+2026-03-25 09:06:32 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 09:06:34 - repositories.sqlalchemy_repository - INFO - Saved User with ID 4
+2026-03-25 09:06:34 - services.user_service - INFO - User 'alice' registered successfully
+2026-03-25 09:06:34 - middleware.logging_middleware - INFO - ✅ POST /users/register | Status: 201 | Time: 1.724s
+2026-03-25 09:06:34 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 09:06:35 - repositories.sqlalchemy_repository - INFO - Saved User with ID 5
+2026-03-25 09:06:35 - services.user_service - INFO - User 'bob' registered successfully
+2026-03-25 09:06:35 - middleware.logging_middleware - INFO - ✅ POST /users/register | Status: 201 | Time: 1.663s
+2026-03-25 09:06:36 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 09:06:36 - services.user_service - WARNING - Duplicate username: 'bob'
+2026-03-25 09:06:36 - routers.user_router - WARNING - Registration failed: User 'bob' already exists
+2026-03-25 09:06:36 - database - ERROR - Database error: 409: User 'bob' already exists
+2026-03-25 09:06:36 - middleware.logging_middleware - INFO - ⚠️ POST /users/register | Status: 409 | Time: 0.735s
+2026-03-25 09:06:36 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 09:06:36 - database - ERROR - Database error: 1 validation error:
+  {'type': 'value_error', 'loc': ('body', 'email'), 'msg': 'value is not a valid email address: The email address is not valid. It must have exactly one @-sign.', 'input': 'invalid-email', 'ctx': {'reason': 'The email address is not valid. It must have exactly one @-sign.'}}
+
+  File "C:\Users\yashwanth.sd\day_3_mini_project3\routers\user_router.py", line 29, in register_user
+    POST /users/register
+2026-03-25 09:06:36 - middleware.logging_middleware - INFO - ⚠️ POST /users/register | Status: 422 | Time: 0.014s
+2026-03-25 09:06:36 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 09:06:36 - database - ERROR - Database error: 1 validation error:
+  {'type': 'string_too_short', 'loc': ('body', 'password'), 'msg': 'String should have at least 8 characters', 'input': 'short', 'ctx': {'min_length': 8}}
+
+  File "C:\Users\yashwanth.sd\day_3_mini_project3\routers\user_router.py", line 29, in register_user
+    POST /users/register
+2026-03-25 09:06:36 - middleware.logging_middleware - INFO - ⚠️ POST /users/register | Status: 422 | Time: 0.006s
+2026-03-25 09:06:36 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 09:06:38 - repositories.sqlalchemy_repository - INFO - Saved User with ID 6
+2026-03-25 09:06:38 - services.user_service - INFO - User 'eve' registered successfully
+2026-03-25 09:06:38 - middleware.logging_middleware - INFO - ✅ POST /users/register | Status: 201 | Time: 1.748s
+2026-03-25 09:06:38 - middleware.logging_middleware - INFO - 📨 POST /users/login | Params: {}
+2026-03-25 09:06:39 - services.user_service - INFO - User 'eve' logged in successfully
+2026-03-25 09:06:39 - middleware.logging_middleware - INFO - ✅ POST /users/login | Status: 200 | Time: 0.684s
+2026-03-25 09:06:39 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 09:06:41 - repositories.sqlalchemy_repository - INFO - Saved User with ID 7
+2026-03-25 09:06:41 - services.user_service - INFO - User 'frank' registered successfully
+2026-03-25 09:06:41 - middleware.logging_middleware - INFO - ✅ POST /users/register | Status: 201 | Time: 1.626s
+2026-03-25 09:06:41 - middleware.logging_middleware - INFO - 📨 POST /users/login | Params: {}
+2026-03-25 09:06:42 - services.user_service - WARNING - Failed login attempt for user 'frank'
+2026-03-25 09:06:42 - routers.user_router - WARNING - Login failed: Invalid username or password
+2026-03-25 09:06:42 - database - ERROR - Database error: 401: Invalid username or password
+2026-03-25 09:06:42 - middleware.logging_middleware - INFO - ⚠️ POST /users/login | Status: 401 | Time: 0.889s
+2026-03-25 09:06:42 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 09:06:44 - repositories.sqlalchemy_repository - INFO - Saved User with ID 8
+2026-03-25 09:06:44 - services.user_service - INFO - User 'user0' registered successfully
+2026-03-25 09:06:44 - middleware.logging_middleware - INFO - ✅ POST /users/register | Status: 201 | Time: 1.627s
+2026-03-25 09:06:44 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 09:06:45 - repositories.sqlalchemy_repository - INFO - Saved User with ID 9
+2026-03-25 09:06:45 - services.user_service - INFO - User 'user1' registered successfully
+2026-03-25 09:06:45 - middleware.logging_middleware - INFO - ✅ POST /users/register | Status: 201 | Time: 1.293s
+2026-03-25 09:06:45 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 09:06:47 - repositories.sqlalchemy_repository - INFO - Saved User with ID 10
+2026-03-25 09:06:47 - services.user_service - INFO - User 'user2' registered successfully
+2026-03-25 09:06:47 - middleware.logging_middleware - INFO - ✅ POST /users/register | Status: 201 | Time: 1.630s
+2026-03-25 09:06:47 - middleware.logging_middleware - INFO - 📨 GET /users | Params: {}
+2026-03-25 09:06:48 - routers.user_router - INFO - Listed 10 users
+2026-03-25 09:06:48 - middleware.logging_middleware - INFO - ✅ GET /users | Status: 200 | Time: 0.605s
+2026-03-25 09:06:48 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 09:06:49 - repositories.sqlalchemy_repository - INFO - Saved User with ID 11
+2026-03-25 09:06:49 - services.user_service - INFO - User 'george' registered successfully
+2026-03-25 09:06:49 - middleware.logging_middleware - INFO - ✅ POST /users/register | Status: 201 | Time: 1.426s
+2026-03-25 09:06:50 - middleware.logging_middleware - INFO - 📨 DELETE /users/11 | Params: {}
+2026-03-25 09:06:51 - repositories.sqlalchemy_repository - INFO - Deleted User with ID 11
+2026-03-25 09:06:51 - services.user_service - INFO - User with ID 11 deleted
+2026-03-25 09:06:51 - middleware.logging_middleware - INFO - ✅ DELETE /users/11 | Status: 200 | Time: 1.220s
+2026-03-25 09:06:51 - middleware.logging_middleware - INFO - 📨 GET /users/11 | Params: {}
+2026-03-25 09:06:51 - services.user_service - ERROR - User ID 11 not found
+2026-03-25 09:06:51 - routers.user_router - ERROR - Error getting user: User with ID 11 not found
+2026-03-25 09:06:51 - database - ERROR - Database error: 404: User with ID 11 not found
+2026-03-25 09:06:52 - middleware.logging_middleware - INFO - ⚠️ GET /users/11 | Status: 404 | Time: 0.802s
+2026-03-25 09:07:34 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 09:07:40 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 09:07:44 - database - INFO - ✅ Database tables initialized
+2026-03-25 09:09:10 - middleware.logging_middleware - INFO - 📨 GET /docs | Params: {}
+2026-03-25 09:09:10 - middleware.logging_middleware - INFO - ✅ GET /docs | Status: 200 | Time: 0.004s
+2026-03-25 09:09:10 - middleware.logging_middleware - INFO - 📨 GET /openapi.json | Params: {}
+2026-03-25 09:09:10 - middleware.logging_middleware - INFO - ✅ GET /openapi.json | Status: 200 | Time: 0.080s
+2026-03-25 09:09:40 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 09:09:42 - repositories.sqlalchemy_repository - INFO - Saved User with ID 12
+2026-03-25 09:09:42 - services.user_service - INFO - User 'string4' registered successfully
+2026-03-25 09:09:42 - middleware.logging_middleware - INFO - ✅ POST /users/register | Status: 201 | Time: 1.960s
+2026-03-25 09:10:00 - middleware.logging_middleware - INFO - 📨 GET /users | Params: {}
+2026-03-25 09:10:00 - routers.user_router - INFO - Listed 11 users
+2026-03-25 09:10:00 - middleware.logging_middleware - INFO - ✅ GET /users | Status: 200 | Time: 0.621s
+2026-03-25 09:12:22 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 09:12:22 - database - INFO - ✅ Database connection pool closed
+2026-03-25 10:09:38 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 10:09:40 - database - ERROR - Failed to initialize database: (psycopg2.OperationalError) could not translate host name "db.gyeyvngxcvrmsinqrmzc.supabase.co" to address: Name or service not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-03-25 10:09:40 - main - ERROR - Failed to initialize database: (psycopg2.OperationalError) could not translate host name "db.gyeyvngxcvrmsinqrmzc.supabase.co" to address: Name or service not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-03-25 10:10:12 - middleware.logging_middleware - INFO - 📨 GET /docs | Params: {}
+2026-03-25 10:10:12 - middleware.logging_middleware - INFO - ✅ GET /docs | Status: 200 | Time: 0.002s
+2026-03-25 10:10:12 - middleware.logging_middleware - INFO - 📨 GET /openapi.json | Params: {}
+2026-03-25 10:10:12 - middleware.logging_middleware - INFO - ✅ GET /openapi.json | Status: 200 | Time: 0.046s
+2026-03-25 10:10:14 - middleware.logging_middleware - INFO - 📨 GET /docs | Params: {}
+2026-03-25 10:10:14 - middleware.logging_middleware - INFO - ✅ GET /docs | Status: 200 | Time: 0.001s
+2026-03-25 10:10:14 - middleware.logging_middleware - INFO - 📨 GET /openapi.json | Params: {}
+2026-03-25 10:10:14 - middleware.logging_middleware - INFO - ✅ GET /openapi.json | Status: 200 | Time: 0.001s
+2026-03-25 10:11:20 - middleware.logging_middleware - INFO - 📨 GET /docs. | Params: {}
+2026-03-25 10:11:20 - middleware.logging_middleware - INFO - ⚠️ GET /docs. | Status: 404 | Time: 0.001s
+2026-03-25 10:11:30 - middleware.logging_middleware - INFO - 📨 GET /docs | Params: {}
+2026-03-25 10:11:30 - middleware.logging_middleware - INFO - ✅ GET /docs | Status: 200 | Time: 0.001s
+2026-03-25 10:11:30 - middleware.logging_middleware - INFO - 📨 GET /openapi.json | Params: {}
+2026-03-25 10:11:30 - middleware.logging_middleware - INFO - ✅ GET /openapi.json | Status: 200 | Time: 0.001s
+2026-03-25 10:11:48 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 10:11:51 - repositories.sqlalchemy_repository - ERROR - Error finding all User: (psycopg2.OperationalError) could not translate host name "db.gyeyvngxcvrmsinqrmzc.supabase.co" to address: Name or service not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-03-25 10:11:51 - database - ERROR - Database error: (psycopg2.OperationalError) could not translate host name "db.gyeyvngxcvrmsinqrmzc.supabase.co" to address: Name or service not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-03-25 10:11:51 - middleware.logging_middleware - ERROR - ❌ POST /users/register | Error: (psycopg2.OperationalError) could not translate host name "db.gyeyvngxcvrmsinqrmzc.supabase.co" to address: Name or service not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8) | Time: 2.221s
+2026-03-25 10:14:30 - middleware.logging_middleware - INFO - 📨 GET /docs | Params: {}
+2026-03-25 10:14:30 - middleware.logging_middleware - INFO - ✅ GET /docs | Status: 200 | Time: 0.001s
+2026-03-25 10:14:30 - middleware.logging_middleware - INFO - 📨 GET /openapi.json | Params: {}
+2026-03-25 10:14:30 - middleware.logging_middleware - INFO - ✅ GET /openapi.json | Status: 200 | Time: 0.001s
+2026-03-25 10:14:47 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 10:14:54 - repositories.sqlalchemy_repository - INFO - Saved User with ID 13
+2026-03-25 10:14:54 - services.user_service - INFO - User 'string10' registered successfully
+2026-03-25 10:14:54 - middleware.logging_middleware - INFO - ✅ POST /users/register | Status: 201 | Time: 6.451s
+2026-03-25 10:15:16 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 10:15:16 - database - INFO - ✅ Database connection pool closed
+2026-03-25 10:18:14 - main - INFO - STARTED TaskAPI | Debug: True
+2026-03-25 10:18:19 - database - INFO - ✅ Database tables initialized
+2026-03-25 10:18:31 - middleware.logging_middleware - INFO - 📨 GET /docs | Params: {}
+2026-03-25 10:18:31 - middleware.logging_middleware - INFO - ✅ GET /docs | Status: 200 | Time: 0.001s
+2026-03-25 10:18:31 - middleware.logging_middleware - INFO - 📨 GET /openapi.json | Params: {}
+2026-03-25 10:18:31 - middleware.logging_middleware - INFO - ✅ GET /openapi.json | Status: 200 | Time: 0.047s
+2026-03-25 10:18:44 - middleware.logging_middleware - INFO - 📨 POST /users/register | Params: {}
+2026-03-25 10:18:45 - repositories.sqlalchemy_repository - INFO - Saved User with ID 14
+2026-03-25 10:18:45 - services.user_service - INFO - User 'string15' registered successfully
+2026-03-25 10:18:45 - middleware.logging_middleware - INFO - ✅ POST /users/register | Status: 201 | Time: 1.459s
+2026-03-25 10:37:32 - main - INFO - SHUTDOWN TaskAPI
+2026-03-25 10:37:32 - database - INFO - ✅ Database connection pool closed

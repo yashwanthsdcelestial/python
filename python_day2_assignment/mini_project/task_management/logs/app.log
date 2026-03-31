@@ -1,0 +1,115 @@
+[2026-03-20 09:00:00] - INFO - config - Settings loaded: TaskAPI (debug=true)
+[2026-03-20 09:01:00] - INFO - repositories.json_repository - Created JSON file: ./data/users.json
+[2026-03-20 09:01:05] - INFO - repositories.json_repository - Created JSON file: ./data/tasks.json
+[2026-03-20 09:05:00] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-20 10:00:00] - INFO - user_service - User 'alice' registered successfully
+[2026-03-20 10:05:00] - INFO - user_service - User 'bob' registered successfully
+[2026-03-20 10:10:00] - INFO - user_service - User 'alice' logged in successfully
+[2026-03-20 10:15:00] - INFO - task_service - Task 'Write report' created for alice
+[2026-03-20 10:20:00] - INFO - task_service - Task 'Review code' created for bob
+[2026-03-20 10:25:00] - INFO - task_service - Listed 2 tasks (page 1)
+[2026-03-20 10:30:00] - INFO - task_service - Task ID 1 updated
+[2026-03-20 10:35:00] - INFO - routers.task_router - DELETE /tasks/2 | 200 | 45ms
+[2026-03-20 10:40:00] - WARNING - user_service - Duplicate username: 'alice'
+[2026-03-20 10:45:00] - WARNING - user_service - Failed login attempt for user 'invalid_user'
+[2026-03-20 10:50:00] - ERROR - task_service - Task ID 999 not found
+[2026-03-20 10:55:00] - INFO - middleware.logging_middleware - POST /tasks | 201 | 25ms
+[2026-03-20 11:00:00] - INFO - middleware.logging_middleware - GET /tasks?status=pending | 200 | 15ms
+[2026-03-20 11:05:00] - INFO - main - 🛑 TaskAPI shutdown
+[2026-03-23 16:41:05] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-23 16:41:27] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-23 16:41:49] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-23 16:42:14] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-23 16:42:14] - INFO - main - 🛑 TaskAPI shutdown
+[2026-03-23 16:42:27] - INFO - main - 🛑 TaskAPI shutdown
+[2026-03-23 16:43:54] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-23 16:44:11] - INFO - middleware.logging_middleware - GET / | 200 | 10ms
+[2026-03-23 16:44:11] - INFO - middleware.logging_middleware - GET /favicon.ico | 404 | 0ms
+[2026-03-23 16:44:16] - INFO - middleware.logging_middleware - GET /health | 200 | 1ms
+[2026-03-23 16:44:40] - INFO - middleware.logging_middleware - GET /docs | 200 | 0ms
+[2026-03-23 16:44:40] - INFO - middleware.logging_middleware - GET /openapi.json | 200 | 45ms
+[2026-03-23 16:47:49] - INFO - middleware.logging_middleware - GET /users/register | 422 | 18ms
+[2026-03-23 16:47:49] - INFO - middleware.logging_middleware - GET /favicon.ico | 404 | 0ms
+[2026-03-23 18:40:40] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-23 18:42:09] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-23 18:42:25] - INFO - middleware.logging_middleware - GET / | 200 | 12ms
+[2026-03-23 18:42:37] - INFO - middleware.logging_middleware - GET /docs | 200 | 0ms
+[2026-03-23 18:42:37] - INFO - middleware.logging_middleware - GET /openapi.json | 200 | 46ms
+[2026-03-23 18:44:04] - INFO - middleware.logging_middleware - POST /users/register | 422 | 26ms
+[2026-03-23 18:44:23] - INFO - repositories.json_repository - Saved users with ID 3
+[2026-03-23 18:44:23] - INFO - services.user_service - User 'alex' registered successfully
+[2026-03-23 18:44:23] - INFO - middleware.logging_middleware - POST /users/register | 201 | 7ms
+[2026-03-23 18:47:42] - INFO - services.user_service - User 'alex' logged in successfully
+[2026-03-23 18:47:42] - INFO - middleware.logging_middleware - POST /users/login | 200 | 4ms
+[2026-03-23 18:48:49] - INFO - routers.user_router - Listed 3 users
+[2026-03-23 18:48:49] - INFO - middleware.logging_middleware - GET /users | 200 | 8ms
+[2026-03-23 18:50:00] - INFO - middleware.logging_middleware - GET /users/3 | 200 | 5ms
+[2026-03-23 18:52:56] - INFO - repositories.json_repository - Deleted users with ID 3
+[2026-03-23 18:52:56] - INFO - services.user_service - User with ID 3 deleted
+[2026-03-23 18:52:56] - INFO - middleware.logging_middleware - DELETE /users/3 | 200 | 6ms
+[2026-03-23 18:53:07] - INFO - routers.user_router - Listed 2 users
+[2026-03-23 18:53:07] - INFO - middleware.logging_middleware - GET /users | 200 | 3ms
+[2026-03-23 18:54:54] - INFO - middleware.logging_middleware - POST /users/register | 422 | 3ms
+[2026-03-23 18:55:16] - INFO - repositories.json_repository - Saved users with ID 3
+[2026-03-23 18:55:16] - INFO - services.user_service - User 'alex' registered successfully
+[2026-03-23 18:55:16] - INFO - middleware.logging_middleware - POST /users/register | 201 | 7ms
+[2026-03-23 18:56:32] - INFO - services.user_service - User 'alex' logged in successfully
+[2026-03-23 18:56:32] - INFO - middleware.logging_middleware - POST /users/login | 200 | 6ms
+[2026-03-23 20:57:51] - INFO - middleware.logging_middleware - GET /docs | 200 | 0ms
+[2026-03-23 20:57:51] - INFO - middleware.logging_middleware - GET /openapi.json | 200 | 1ms
+[2026-03-23 20:59:34] - INFO - routers.user_router - Listed 3 users
+[2026-03-23 20:59:34] - INFO - middleware.logging_middleware - GET /users | 200 | 5ms
+[2026-03-23 20:59:59] - INFO - repositories.json_repository - Saved tasks with ID 4
+[2026-03-23 20:59:59] - INFO - services.task_service - Task 'Fix login bug' created for alice
+[2026-03-23 20:59:59] - INFO - middleware.logging_middleware - POST /tasks | 201 | 34ms
+[2026-03-23 21:02:23] - INFO - services.task_service - Listed 2 tasks (page 1)
+[2026-03-23 21:02:23] - INFO - middleware.logging_middleware - GET /tasks | 200 | 9ms
+[2026-03-23 21:03:26] - INFO - middleware.logging_middleware - GET /tasks/4 | 200 | 7ms
+[2026-03-23 21:04:03] - INFO - repositories.json_repository - Updated tasks with ID 4
+[2026-03-23 21:04:03] - INFO - services.task_service - Task ID 4 updated
+[2026-03-23 21:04:03] - INFO - middleware.logging_middleware - PUT /tasks/4 | 200 | 20ms
+[2026-03-23 21:04:52] - INFO - services.task_service - Listed 1 tasks (page 1)
+[2026-03-23 21:04:52] - INFO - middleware.logging_middleware - GET /tasks | 200 | 6ms
+[2026-03-23 21:05:27] - INFO - repositories.json_repository - Saved tasks with ID 5
+[2026-03-23 21:05:27] - INFO - services.task_service - Task 'Fix login bug' created for alice
+[2026-03-23 21:05:27] - INFO - middleware.logging_middleware - POST /tasks | 201 | 16ms
+[2026-03-23 21:05:36] - INFO - services.task_service - Listed 2 tasks (page 1)
+[2026-03-23 21:05:36] - INFO - middleware.logging_middleware - GET /tasks | 200 | 8ms
+[2026-03-23 21:06:53] - INFO - repositories.json_repository - Updated tasks with ID 5
+[2026-03-23 21:06:53] - INFO - services.task_service - Task ID 5 updated
+[2026-03-23 21:06:53] - INFO - middleware.logging_middleware - PUT /tasks/5 | 200 | 12ms
+[2026-03-23 21:07:14] - INFO - services.task_service - Listed 1 tasks (page 1)
+[2026-03-23 21:07:14] - INFO - middleware.logging_middleware - GET /tasks | 200 | 8ms
+[2026-03-23 21:07:24] - INFO - services.task_service - Listed 2 tasks (page 1)
+[2026-03-23 21:07:24] - INFO - middleware.logging_middleware - GET /tasks | 200 | 6ms
+[2026-03-23 21:10:17] - INFO - repositories.json_repository - Updated tasks with ID 5
+[2026-03-23 21:10:17] - INFO - services.task_service - Task ID 5 updated
+[2026-03-23 21:10:17] - INFO - middleware.logging_middleware - PATCH /tasks/5 | 200 | 14ms
+[2026-03-23 21:11:04] - INFO - repositories.json_repository - Deleted tasks with ID 5
+[2026-03-23 21:11:04] - INFO - services.task_service - Task ID 5 deleted
+[2026-03-23 21:11:04] - INFO - middleware.logging_middleware - DELETE /tasks/5 | 200 | 20ms
+[2026-03-23 21:11:25] - INFO - middleware.logging_middleware - GET /health | 200 | 3ms
+[2026-03-23 21:11:44] - INFO - middleware.logging_middleware - GET / | 200 | 8ms
+[2026-03-25 08:48:29] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-25 08:49:46] - INFO - main - 🛑 TaskAPI shutdown
+[2026-03-25 08:51:28] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-25 08:52:13] - INFO - middleware.logging_middleware - GET /docs | 200 | 1ms
+[2026-03-25 08:52:13] - INFO - middleware.logging_middleware - GET /openapi.json | 200 | 88ms
+[2026-03-25 08:52:31] - INFO - repositories.json_repository - Saved users with ID 4
+[2026-03-25 08:52:31] - INFO - services.user_service - User 'string1' registered successfully
+[2026-03-25 08:52:31] - INFO - middleware.logging_middleware - POST /users/register | 201 | 74ms
+[2026-03-25 08:55:21] - INFO - main - 🛑 TaskAPI shutdown
+[2026-03-25 09:00:22] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-25 09:00:54] - INFO - middleware.logging_middleware - GET /docs | 200 | 1ms
+[2026-03-25 09:00:54] - INFO - middleware.logging_middleware - GET /openapi.json | 200 | 86ms
+[2026-03-25 09:01:12] - INFO - repositories.json_repository - Saved users with ID 5
+[2026-03-25 09:01:12] - INFO - services.user_service - User 'string22' registered successfully
+[2026-03-25 09:01:12] - INFO - middleware.logging_middleware - POST /users/register | 201 | 66ms
+[2026-03-25 09:02:41] - INFO - main - 🛑 TaskAPI shutdown
+[2026-03-25 10:16:50] - INFO - main - ✅ TaskAPI started | Debug: True
+[2026-03-25 10:16:58] - INFO - middleware.logging_middleware - GET /docs | 200 | 0ms
+[2026-03-25 10:16:58] - INFO - middleware.logging_middleware - GET /openapi.json | 200 | 42ms
+[2026-03-25 10:17:12] - INFO - repositories.json_repository - Saved users with ID 6
+[2026-03-25 10:17:12] - INFO - services.user_service - User 'string10' registered successfully
+[2026-03-25 10:17:12] - INFO - middleware.logging_middleware - POST /users/register | 201 | 20ms
+[2026-03-25 10:17:21] - INFO - main - 🛑 TaskAPI shutdown

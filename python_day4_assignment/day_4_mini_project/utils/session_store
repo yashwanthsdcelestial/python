@@ -1,0 +1,23 @@
+"""
+Session store: maps a simple token → user dict.
+On login the token is returned in the response and stored here.
+All protected endpoints read X-Auth-Token header to identify the caller.
+"""
+from typing import Optional
+
+_sessions: dict[str, dict] = {}
+
+
+def create_session(user_id: int, username: str, role: str) -> str:
+    import uuid
+    token = str(uuid.uuid4())
+    _sessions[token] = {"user_id": user_id, "username": username, "role": role}
+    return token
+
+
+def get_session(token: str) -> Optional[dict]:
+    return _sessions.get(token)
+
+
+def delete_session(token: str):
+    _sessions.pop(token, None)

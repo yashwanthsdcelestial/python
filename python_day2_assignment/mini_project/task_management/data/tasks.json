@@ -1,0 +1,44 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Write report",
+      "description": "Q2 summary report",
+      "status": "pending",
+      "priority": "high",
+      "owner": "alice",
+      "created_at": "2026-03-20T10:00:00",
+      "updated_at": "2026-03-20T10:00:00"
+    },
+    {
+      "id": 2,
+      "title": "Review code",
+      "description": "Review pull requests",
+      "status": "in_progress",
+      "priority": "medium",
+      "owner": "bob",
+      "created_at": "2026-03-20T10:30:00",
+      "updated_at": "2026-03-20T10:30:00"
+    },
+    {
+      "id": 3,
+      "title": "Update documentation",
+      "description": null,
+      "status": "completed",
+      "priority": "low",
+      "owner": "alice",
+      "created_at": "2026-03-20T11:00:00",
+      "updated_at": "2026-03-20T11:45:00"
+    },
+    {
+      "title": "string",
+      "description": "string",
+      "priority": "low",
+      "status": "pending",
+      "owner": "alice",
+      "created_at": "2026-03-23T20:59:59.988356",
+      "updated_at": "2026-03-23T21:04:03.068016",
+      "id": 4
+    }
+  ]
+}

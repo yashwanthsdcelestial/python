@@ -1,0 +1,46 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "alice",
+      "email": "alice@mail.com",
+      "password": "9b71d224bd62f3785d96f46e3e6a9d6d3e5b0b5c5506ab2c12c6a6d6e5b3b4a3",
+      "created_at": "2026-03-20T09:00:00"
+    },
+    {
+      "id": 2,
+      "username": "bob",
+      "email": "bob@mail.com",
+      "password": "9b71d224bd62f3785d96f46e3e6a9d6d3e5b0b5c5506ab2c12c6a6d6e5b3b4a3",
+      "created_at": "2026-03-20T09:15:00"
+    },
+    {
+      "username": "alex",
+      "email": "alex@mail.com",
+      "password": "7594d260ee1c614092398833ec76ea2d84a1371faa3f7ab59ae016741caab490",
+      "created_at": "2026-03-23T18:55:16.432098",
+      "id": 3
+    },
+    {
+      "username": "string1",
+      "email": "user1@example.com",
+      "password": "7bdc19cfa7f55b7437cf1e1404003f9f977afd065f44bcd795734226cfd2ea2e",
+      "created_at": "2026-03-25T08:52:31.180809",
+      "id": 4
+    },
+    {
+      "username": "string22",
+      "email": "user22@example.com",
+      "password": "b39076651602f6056d27cd23a0a6c72a4d2529c453951ead7915a6e19eaee8be",
+      "created_at": "2026-03-25T09:01:12.155053",
+      "id": 5
+    },
+    {
+      "username": "string10",
+      "email": "user10@example.com",
+      "password": "3896faaecb41edfede7e8dcf0f87f94fcf45671084b23fc63550565dfdbc3242",
+      "created_at": "2026-03-25T10:17:12.526375",
+      "id": 6
+    }
+  ]
+}
