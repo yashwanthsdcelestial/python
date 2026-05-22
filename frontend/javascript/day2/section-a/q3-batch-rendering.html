@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Q3 — Batch DOM Rendering with rAF</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f5f5f5; }
+    h2 { margin-bottom: 1rem; }
+    .controls { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    button {
+      padding: 8px 18px; border: none; border-radius: 6px;
+      background: #2563eb; color: white; cursor: pointer; font-size: 14px;
+    }
+    button:hover { background: #1d4ed8; }
+    button.danger { background: #dc2626; }
+    button.danger:hover { background: #b91c1c; }
+    #progress {
+      font-size: 14px; color: #374151; margin-bottom: .5rem;
+      background: white; padding: 8px 12px; border-radius: 6px;
+      border: 1px solid #e5e7eb; min-height: 36px;
+    }
+    #progress-bar-wrap { background: #e5e7eb; border-radius: 6px; height: 8px; margin-bottom: 1rem; }
+    #progress-bar { height: 8px; background: #2563eb; border-radius: 6px; width: 0; transition: width .1s; }
+    #stats { font-size: 13px; color: #6b7280; margin-bottom: 1rem; }
+    #list-container {
+      max-height: 400px; overflow-y: auto; background: white;
+      border-radius: 8px; border: 1px solid #e5e7eb; padding: .5rem;
+    }
+    #list-container ul { list-style: none; padding: 0; margin: 0; }
+    #list-container li {
+      padding: 6px 10px; border-bottom: 1px solid #f3f4f6;
+      font-size: 13px; color: #374151;
+    }
+    #list-container li:nth-child(even) { background: #f9fafb; }
+  </style>
+</head>
+<body>
+  <h2>Q3 — Batch Rendering with DocumentFragment + rAF</h2>
+  <div class="controls">
+    <button onclick="startBatchRender()">Render 10,000 items (Batched)</button>
+    <button onclick="startNaiveRender()" class="danger">Render 10,000 items (Naive)</button>
+    <button onclick="clearList()">Clear</button>
+  </div>
+  <div id="progress">Ready.</div>
+  <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+  <div id="stats"></div>
+  <div id="list-container"><ul id="the-list"></ul></div>
+
+  <script>
+    const TOTAL     = 10000;
+    const BATCH     = 500;
+    let   rendering = false;
+
+    // Generate 10,000 items
+    const items = Array.from({ length: TOTAL }, (_, i) => ({
+      id:   i + 1,
+      text: `Item ${i + 1}`
+    }));
+
+    function setProgress(msg, pct) {
+      document.getElementById('progress').textContent = msg;
+      document.getElementById('progress-bar').style.width = pct + '%';
+    }
+
+    function clearList() {
+      document.getElementById('the-list').innerHTML = '';
+      document.getElementById('stats').textContent  = '';
+      setProgress('Ready.', 0);
+      rendering = false;
+    }
+
+    /**
+     * renderList — Batched rendering using DocumentFragment + requestAnimationFrame
+     * Splits 10,000 items into chunks of `batchSize`, scheduling each chunk via rAF
+     * so the main thread isn't blocked and the page stays interactive.
+     */
+    function renderList(containerId, items, batchSize) {
+      if (rendering) return;
+      rendering = true;
+      clearList();
+
+      const list      = document.getElementById('the-list');
+      const startTime = performance.now();
+      let   offset    = 0;
+
+      function renderBatch() {
+        if (!rendering) return; // aborted
+
+        const fragment = document.createDocumentFragment();
+        const end      = Math.min(offset + batchSize, items.length);
+
+        for (let i = offset; i < end; i++) {
+          const li = document.createElement('li');
+          li.textContent    = items[i].text;
+          li.dataset.id     = items[i].id;
+          fragment.appendChild(li);
+        }
+
+        list.appendChild(fragment);
+        offset = end;
+
+        const pct = Math.round((offset / items.length) * 100);
+        setProgress(`Rendered ${offset.toLocaleString()} / ${items.length.toLocaleString()}`, pct);
+
+        if (offset < items.length) {
+          requestAnimationFrame(renderBatch);
+        } else {
+          const elapsed = (performance.now() - startTime).toFixed(2);
+          setProgress(`Done! All ${items.length.toLocaleString()} items rendered.`, 100);
+          document.getElementById('stats').textContent =
+            `Batched render time: ${elapsed}ms | Batch size: ${batchSize}`;
+          rendering = false;
+        }
+      }
+
+      requestAnimationFrame(renderBatch);
+    }
+
+    function startBatchRender() {
+      renderList('the-list', items, BATCH);
+    }
+
+    /**
+     * Naive render — dumps all 10,000 items at once.
+     * Blocks the main thread. Compare with batched version.
+     */
+    function startNaiveRender() {
+      clearList();
+      const list      = document.getElementById('the-list');
+      const startTime = performance.now();
+
+      const fragment = document.createDocumentFragment();
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item.text;
+        li.dataset.id  = item.id;
+        fragment.appendChild(li);
+      });
+      list.appendChild(fragment);
+
+      const elapsed = (performance.now() - startTime).toFixed(2);
+      setProgress('Done (naive render)', 100);
+      document.getElementById('stats').textContent =
+        `Naive render time: ${elapsed}ms | All items inserted in one synchronous block`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Box Model Explorer</title>
+    <link rel="stylesheet" href="styles_q4.css">
+</head>
+<body>
+
+    <section class="container">
+
+        <section class="box-wrapper">
+            <section class="box content-box">
+                Content Box
+            </section>
+            <p class="label">
+                Rendered width = 350px (300 + 20 + 20 + 5 + 5)
+            </p>
+        </section>
+
+        <section class="box-wrapper">
+            <section class="box border-box">
+                Border Box
+            </section>
+            <p class="label">
+                Rendered width = 300px (content shrinks internally)
+            </p>
+        </section>
+
+    </section>
+
+</body>
+</html>

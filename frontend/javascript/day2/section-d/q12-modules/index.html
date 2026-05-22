@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Q12 — ES6 Modules</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f5f5f5; }
+    h2 { margin-bottom: 1.5rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1rem; }
+    .panel { background: white; border-radius: 10px; padding: 1.25rem; border: 1px solid #e5e7eb; }
+    .panel h3 { font-size: 14px; font-weight: 600; margin-bottom: .75rem; color: #374151; }
+    pre { background: #1e1e1e; color: #86efac; padding: .75rem; border-radius: 7px; font-size: 12px; white-space: pre-wrap; min-height: 60px; }
+    button { padding: 8px 18px; border: none; border-radius: 7px; background: #2563eb; color: white; cursor: pointer; font-size: 14px; margin-top: .75rem; }
+    button:hover { background: #1d4ed8; }
+    .tag { display: inline-block; background: #eff6ff; color: #1d4ed8; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-bottom: .5rem; }
+    #modal-result { font-size: 13px; color: #059669; margin-top: .5rem; min-height: 18px; }
+    .note { font-size: 12px; color: #6b7280; margin-bottom: .75rem; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <h2>Q12 — ES6 Modules Architecture</h2>
+  <p style="font-size:13px;color:#6b7280;margin-bottom:1.5rem;">
+    Open DevTools → Network tab to see each module file being loaded separately. Modal uses dynamic <code>import()</code>.
+  </p>
+
+  <div class="grid">
+    <div class="panel">
+      <span class="tag">utils/validators.js</span>
+      <h3>Named exports — Validators</h3>
+      <pre id="validators-out">Loading…</pre>
+    </div>
+    <div class="panel">
+      <span class="tag">utils/formatters.js</span>
+      <h3>Named exports — Formatters</h3>
+      <pre id="formatters-out">Loading…</pre>
+    </div>
+    <div class="panel">
+      <span class="tag">services/storage.js</span>
+      <h3>Default export — StorageService</h3>
+      <pre id="storage-out">Loading…</pre>
+    </div>
+    <div class="panel">
+      <span class="tag">services/api.js</span>
+      <h3>Default export — ApiService</h3>
+      <pre id="api-out">Fetching from JSONPlaceholder…</pre>
+    </div>
+    <div class="panel">
+      <span class="tag">components/modal.js — dynamic import()</span>
+      <h3>Lazy-loaded Modal Component</h3>
+      <p class="note">Modal module is NOT loaded on page load. It's fetched only when you click the button below — check the Network tab!</p>
+      <button id="open-modal-btn">Open Modal (lazy load)</button>
+      <div id="modal-result"></div>
+    </div>
+  </div>
+
+  <!-- type="module" enables ES6 import/export -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>

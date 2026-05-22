@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio Website">
+    <title>Portfolio</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <a href="#home" class="skip-link">Skip to content</a>
+
+    <header class="navbar">
+        <h1 class="logo">MyPortfolio</h1>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <button onclick="document.body.classList.toggle('dark-theme')">Light/Dark</button>
+    </header>
+
+    <main id="home">
+
+        <section class="hero">
+            <h2>Hello, I'm Yashwanth</h2>
+            <p>Frontend Developer</p>
+            <div class="scroll-indicator">↓</div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="about-grid">
+                <div class="about-image"></div>
+                <div>
+                    <h2>About Me</h2>
+                    <p>I build responsive and modern web applications using clean UI principles.</p>
+                    <div class="skills">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="projects">
+            <h2>Projects</h2>
+            <div class="project-grid">
+                <div class="card">Project 1</div>
+                <div class="card">Project 2</div>
+                <div class="card">Project 3</div>
+                <div class="card">Project 4</div>
+                <div class="card">Project 5</div>
+                <div class="card span-2">Project 6</div>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <div class="testimonial">"Great work!"</div>
+            <div class="testimonial">"Amazing developer"</div>
+            <div class="testimonial">"Highly recommend"</div>
+        </section>
+
+        <section id="contact" class="contact">
+    <div class="contact-container">
+
+        <form class="contact-form">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input id="name" type="text" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" type="email" required>
+            </div>
+
+            <div class="form-group full">
+                <label for="subject">Subject</label>
+                <select id="subject" required>
+                    <option value="">Select</option>
+                    <option>Project Inquiry</option>
+                    <option>Job Opportunity</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group full">
+                <label for="message">Message</label>
+                <textarea id="message" rows="4" required></textarea>
+            </div>
+
+            <button type="submit">Send Message</button>
+        </form>
+
+        <div class="contact-info">
+            <h3>Contact Info</h3>
+            <p>+91 9876543210</p>
+            <p>email@example.com</p>
+            <p>India</p>
+        </div>
+
+    </div>
+</section>
+
+    </main>
+
+    <footer>
+        <p>© 2026 My Portfolio</p>
+    </footer>
+
+</body>
+</html>

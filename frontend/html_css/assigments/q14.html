@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CSS Loading Animations</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+        padding: 40px;
+    }
+
+    .section {
+        text-align: center;
+    }
+
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #ccc;
+        border-top: 5px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .dots {
+        display: flex;
+        gap: 10px;
+    }
+
+    .dot {
+        width: 12px;
+        height: 12px;
+        background: #333;
+        border-radius: 50%;
+        animation: bounce 0.6s infinite alternate;
+    }
+
+    .dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes bounce {
+        to {
+            transform: translateY(-10px);
+            opacity: 0.6;
+        }
+    }
+
+    .skeleton {
+        width: 300px;
+        height: 100px;
+        border-radius: 8px;
+        background: linear-gradient(90deg, #eee 25%, #ddd 50%, #eee 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+        to {
+            background-position: -200% 0;
+        }
+    }
+
+    .progress-container {
+        width: 300px;
+        height: 10px;
+        background: #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: #4f46e5;
+        animation: load 2s ease infinite;
+    }
+
+    @keyframes load {
+        0% {
+            width: 0%;
+        }
+        100% {
+            width: 100%;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="section">
+    <h3>Spinner</h3>
+    <div class="spinner"></div>
+</div>
+
+<div class="section">
+    <h3>Bouncing Dots</h3>
+    <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+</div>
+
+<div class="section">
+    <h3>Skeleton Screen</h3>
+    <div class="skeleton"></div>
+</div>
+
+<div class="section">
+    <h3>Progress Bar</h3>
+    <div class="progress-container">
+        <div class="progress-bar"></div>
+    </div>
+</div>
+
+</body>
+</html>

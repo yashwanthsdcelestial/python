@@ -1,0 +1,40 @@
+.card {
+    padding: 20px;
+    background: var(--primary);
+    color: white;
+    border-radius: var(--radius);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.span-2 {
+    grid-column: span 2;
+}
+
+.skills span {
+    background: var(--secondary);
+    padding: 5px 10px;
+    margin: 5px;
+    display: inline-block;
+    border-radius: var(--radius);
+    color: white;
+}
+
+.testimonial {
+    padding: 20px;
+    background: #eeeeee;
+    margin: 10px;
+    border-radius: var(--radius);
+}
+
+button {
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    border: none;
+    padding: 10px;
+    color: white;
+    border-radius: var(--radius);
+    cursor: pointer;
+}

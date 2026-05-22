@@ -1,0 +1,18 @@
+:root {
+    --bg: #ffffff;
+    --text: #111111;
+    --primary: #4f46e5;
+    --secondary: #6366f1;
+    --radius: 10px;
+}
+
+.dark-theme {
+    --bg: #111111;
+    --text: #ffffff;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+}

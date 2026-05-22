@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quarterly Sales Report</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        caption {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+        }
+        thead {
+            background-color: #ddd;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #f2f2f2;
+        }
+        td {
+            text-align: right;
+        }
+        th[scope="row"] {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<table>
+    <caption>Quarterly Sales Report</caption>
+
+    <thead>
+        <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Q1</th>
+            <th scope="col">Q2</th>
+            <th scope="col">Q3</th>
+            <th scope="col">Q4</th>
+            <th scope="col">Total</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <th scope="row">Alpha</th>
+            <td>1200</td>
+            <td>1500</td>
+            <td>1700</td>
+            <td>1600</td>
+            <td>6000</td>
+        </tr>
+        <tr>
+            <th scope="row">Beta</th>
+            <td>1000</td>
+            <td>1100</td>
+            <td>1300</td>
+            <td>1400</td>
+            <td>4800</td>
+        </tr>
+        <tr>
+            <th scope="row">Gamma</th>
+            <td>900</td>
+            <td>1200</td>
+            <td>1400</td>
+            <td>1500</td>
+            <td>5000</td>
+        </tr>
+        <tr>
+            <th scope="row">Total</th>
+            <td colspan="5" position="center">15800</td>
+        </tr>
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <th scope="row">Grand Total</th>
+            <td>3100</td>
+            <td>3800</td>
+            <td>4400</td>
+            <td>4500</td>
+            <td>15800</td>
+        </tr>
+    </tfoot>
+
+</table>
+
+</body>
+</html>

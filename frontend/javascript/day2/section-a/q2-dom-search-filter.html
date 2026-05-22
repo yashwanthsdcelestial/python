@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Q2 — Live DOM Search Filter</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f5f5f5; }
+    h2 { margin-bottom: 1rem; }
+    #search {
+      width: 100%; padding: 10px 14px; font-size: 16px;
+      border: 2px solid #d1d5db; border-radius: 8px; margin-bottom: 1.5rem;
+      outline: none; transition: border-color .2s;
+    }
+    #search:focus { border-color: #2563eb; }
+    #cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 1rem; }
+    .card {
+      background: white; border-radius: 10px; padding: 1.2rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08); transition: opacity .2s, transform .2s;
+    }
+    .card h3 { margin: 0 0 .4rem; color: #1e40af; }
+    .card p  { margin: 0; color: #6b7280; font-size: 14px; }
+    .card.hidden { display: none; }
+    .highlight { background: #fef08a; border-radius: 2px; padding: 0 2px; }
+    #no-results {
+      display: none; text-align: center; padding: 2rem;
+      color: #9ca3af; font-size: 15px; grid-column: 1/-1;
+    }
+    #no-results.visible { display: block; }
+    #count { font-size: 13px; color: #6b7280; margin-bottom: .5rem; }
+  </style>
+</head>
+<body>
+  <h2>Q2 — Live DOM Search Filter</h2>
+  <input id="search" type="text" placeholder="Search cards..." aria-label="Search cards" />
+  <div id="count"></div>
+  <div id="cards">
+    <div class="card">
+      <h3>JavaScript Basics</h3>
+      <p>Learn variables and functions</p>
+    </div>
+    <div class="card">
+      <h3>CSS Grid</h3>
+      <p>Master grid layouts with ease</p>
+    </div>
+    <div class="card">
+      <h3>React Hooks</h3>
+      <p>useState and useEffect explained</p>
+    </div>
+    <div class="card">
+      <h3>TypeScript Fundamentals</h3>
+      <p>Type-safe JavaScript for large projects</p>
+    </div>
+    <div class="card">
+      <h3>Node.js Basics</h3>
+      <p>Server-side JavaScript with Node</p>
+    </div>
+    <div class="card">
+      <h3>Fetch API & Async</h3>
+      <p>Making HTTP requests with async/await</p>
+    </div>
+    <p id="no-results">No results found</p>
+  </div>
+
+  <script>
+    const searchInput  = document.getElementById('search');
+    const cards        = document.querySelectorAll('.card');
+    const noResults    = document.getElementById('no-results');
+    const countDisplay = document.getElementById('count');
+
+    /**
+     * highlightText - wraps matching text in <mark class="highlight">
+     * Works on text nodes only (safe, no innerHTML injection)
+     */
+    function highlightText(element, query) {
+      // Reset to original text first
+      const h3 = element.querySelector('h3');
+      const p  = element.querySelector('p');
+      // We stored originals as data attributes
+      h3.textContent = h3.dataset.original;
+      p.textContent  = p.dataset.original;
+
+      if (!query) return;
+
+      [h3, p].forEach(el => {
+        const original = el.dataset.original;
+        const idx = original.toLowerCase().indexOf(query.toLowerCase());
+        if (idx === -1) return;
+
+        // Build: text node + mark + text node
+        el.textContent = '';
+        const before = document.createTextNode(original.slice(0, idx));
+        const mark   = document.createElement('mark');
+        mark.className = 'highlight';
+        mark.textContent = original.slice(idx, idx + query.length);
+        const after  = document.createTextNode(original.slice(idx + query.length));
+
+        el.appendChild(before);
+        el.appendChild(mark);
+        el.appendChild(after);
+      });
+    }
+
+    // Store originals as data attributes (once)
+    cards.forEach(card => {
+      card.querySelector('h3').dataset.original = card.querySelector('h3').textContent;
+      card.querySelector('p').dataset.original  = card.querySelector('p').textContent;
+    });
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.trim();
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        // Use textContent for comparison (not innerHTML)
+        const title = card.querySelector('h3').dataset.original.toLowerCase();
+        const desc  = card.querySelector('p').dataset.original.toLowerCase();
+        const match = !query || title.includes(query.toLowerCase()) || desc.includes(query.toLowerCase());
+
+        if (match) {
+          card.classList.remove('hidden');
+          highlightText(card, query);
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      // Show / hide no-results
+      noResults.classList.toggle('visible', visibleCount === 0);
+
+      // Update count
+      const total = cards.length;
+      countDisplay.textContent = query
+        ? `Showing ${visibleCount} of ${total} cards`
+        : `${total} cards`;
+    });
+
+    // Initial count
+    countDisplay.textContent = `${cards.length} cards`;
+  </script>
+</body>
+</html>

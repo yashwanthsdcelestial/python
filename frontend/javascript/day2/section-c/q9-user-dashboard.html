@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Q9 — User Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; background: #f3f4f6; padding: 1.5rem; }
+    h2 { margin-bottom: .25rem; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: .5rem; }
+    #refresh-btn { padding: 8px 18px; background: #2563eb; color: white; border: none; border-radius: 7px; cursor: pointer; font-size: 14px; }
+    #refresh-btn:hover { background: #1d4ed8; }
+    #total-time { font-size: 12px; color: #6b7280; }
+    .sections { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1rem; }
+    .section { background: white; border-radius: 10px; border: 1px solid #e5e7eb; overflow: hidden; }
+    .section-header { padding: .75rem 1rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
+    .section-header h3 { font-size: 15px; }
+    .section-body { padding: .75rem 1rem; min-height: 160px; }
+    /* Spinner */
+    .spinner { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px; color: #6b7280; font-size: 13px; gap: 8px; }
+    .spin { width: 28px; height: 28px; border: 3px solid #e5e7eb; border-top-color: #2563eb; border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    /* Error state */
+    .error-state { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px; gap: 8px; }
+    .error-msg { color: #dc2626; font-size: 13px; text-align: center; }
+    .retry-btn { padding: 5px 14px; background: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; border-radius: 5px; cursor: pointer; font-size: 13px; }
+    .retry-btn:hover { background: #fee2e2; }
+    /* User cards */
+    .user-card { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
+    .user-card:last-child { border-bottom: none; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; background: #dbeafe; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; color: #1d4ed8; flex-shrink: 0; }
+    .user-info p { font-size: 14px; font-weight: 500; }
+    .user-info small { font-size: 12px; color: #6b7280; }
+    /* Post list */
+    .post-item { padding: 7px 0; border-bottom: 1px solid #f3f4f6; font-size: 13px; }
+    .post-item:last-child { border-bottom: none; }
+    .post-title { font-weight: 500; color: #111827; line-height: 1.4; }
+    /* Todo list */
+    .todo-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f3f4f6; font-size: 13px; }
+    .todo-item:last-child { border-bottom: none; }
+    .todo-item input[type="checkbox"] { flex-shrink: 0; }
+    .todo-item.done label { text-decoration: line-through; color: #9ca3af; }
+    .badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+    .badge.loading { background: #fef3c7; color: #92400e; }
+    .badge.ok      { background: #dcfce7; color: #166534; }
+    .badge.error   { background: #fee2e2; color: #991b1b; }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div>
+      <h2>User Dashboard</h2>
+      <div id="total-time">—</div>
+    </div>
+    <button id="refresh-btn" onclick="loadAll()">⟳ Refresh All</button>
+  </div>
+
+  <div class="sections">
+    <div class="section" id="sec-users">
+      <div class="section-header">
+        <h3>Users</h3>
+        <span class="badge loading" id="badge-users">Loading…</span>
+      </div>
+      <div class="section-body" id="body-users"></div>
+    </div>
+
+    <div class="section" id="sec-posts">
+      <div class="section-header">
+        <h3>Posts by User #1</h3>
+        <span class="badge loading" id="badge-posts">Loading…</span>
+      </div>
+      <div class="section-body" id="body-posts"></div>
+    </div>
+
+    <div class="section" id="sec-todos">
+      <div class="section-header">
+        <h3>Todos for User #1</h3>
+        <span class="badge loading" id="badge-todos">Loading…</span>
+      </div>
+      <div class="section-body" id="body-todos"></div>
+    </div>
+  </div>
+
+  <script>
+    const BASE = 'https://jsonplaceholder.typicode.com';
+
+    // ── Loading state ───────────────────────────────────────────────────
+    function showLoading(sectionId) {
+      const body  = document.getElementById('body-' + sectionId);
+      const badge = document.getElementById('badge-' + sectionId);
+      body.innerHTML = '';
+      const spin = document.createElement('div');
+      spin.className = 'spinner';
+      spin.innerHTML = '<div class="spin"></div><span>Fetching…</span>';
+      body.appendChild(spin);
+      badge.textContent = 'Loading…';
+      badge.className   = 'badge loading';
+    }
+
+    // ── Error state ─────────────────────────────────────────────────────
+    function showError(sectionId, message, retryFn) {
+      const body  = document.getElementById('body-' + sectionId);
+      const badge = document.getElementById('badge-' + sectionId);
+
+      body.innerHTML = '';
+      const div = document.createElement('div');
+      div.className = 'error-state';
+
+      const msg = document.createElement('div');
+      msg.className   = 'error-msg';
+      msg.textContent = '⚠ ' + message;
+
+      const btn = document.createElement('button');
+      btn.className   = 'retry-btn';
+      btn.textContent = '↺ Retry';
+      btn.addEventListener('click', retryFn);
+
+      div.appendChild(msg);
+      div.appendChild(btn);
+      body.appendChild(div);
+
+      badge.textContent = 'Error';
+      badge.className   = 'badge error';
+    }
+
+    // ── Render helpers ──────────────────────────────────────────────────
+    function renderUsers(users) {
+      const body = document.getElementById('body-users');
+      body.innerHTML = '';
+      const frag = document.createDocumentFragment();
+      users.slice(0, 5).forEach(u => {
+        const div   = document.createElement('div');
+        div.className = 'user-card';
+        const av    = document.createElement('div');
+        av.className = 'avatar';
+        av.textContent = u.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+        const info  = document.createElement('div');
+        info.className = 'user-info';
+        const p     = document.createElement('p');
+        p.textContent = u.name;
+        const small = document.createElement('small');
+        small.textContent = u.email;
+        info.appendChild(p);
+        info.appendChild(small);
+        div.appendChild(av);
+        div.appendChild(info);
+        frag.appendChild(div);
+      });
+      body.appendChild(frag);
+      document.getElementById('badge-users').textContent = `${users.length} users`;
+      document.getElementById('badge-users').className   = 'badge ok';
+    }
+
+    function renderPosts(posts) {
+      const body = document.getElementById('body-posts');
+      body.innerHTML = '';
+      const frag = document.createDocumentFragment();
+      posts.slice(0, 5).forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'post-item';
+        const title = document.createElement('div');
+        title.className   = 'post-title';
+        title.textContent = p.title;
+        div.appendChild(title);
+        frag.appendChild(div);
+      });
+      body.appendChild(frag);
+      document.getElementById('badge-posts').textContent = `${posts.length} posts`;
+      document.getElementById('badge-posts').className   = 'badge ok';
+    }
+
+    function renderTodos(todos) {
+      const body = document.getElementById('body-todos');
+      body.innerHTML = '';
+      const frag = document.createDocumentFragment();
+      todos.slice(0, 6).forEach((t, i) => {
+        const div = document.createElement('div');
+        div.className = 'todo-item' + (t.completed ? ' done' : '');
+        const cb  = document.createElement('input');
+        cb.type    = 'checkbox';
+        cb.id      = 'todo-' + i;
+        cb.checked = t.completed;
+        cb.disabled = true;
+        const lbl = document.createElement('label');
+        lbl.htmlFor     = 'todo-' + i;
+        lbl.textContent = t.title;
+        div.appendChild(cb);
+        div.appendChild(lbl);
+        frag.appendChild(div);
+      });
+      body.appendChild(frag);
+      const done = todos.filter(t => t.completed).length;
+      document.getElementById('badge-todos').textContent = `${done}/${todos.length} done`;
+      document.getElementById('badge-todos').className   = 'badge ok';
+    }
+
+    // ── Fetch each section independently ───────────────────────────────
+    async function fetchSection(id, url, renderFn) {
+      showLoading(id);
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        renderFn(data);
+      } catch (err) {
+        showError(id, err.message, () => fetchSection(id, url, renderFn));
+      }
+    }
+
+    // ── Load all via Promise.allSettled ─────────────────────────────────
+    async function loadAll() {
+      const t0 = performance.now();
+
+      const tasks = [
+        fetchSection('users', `${BASE}/users`,                renderUsers),
+        fetchSection('posts', `${BASE}/posts?userId=1`,       renderPosts),
+        fetchSection('todos', `${BASE}/todos?userId=1`,       renderTodos),
+      ];
+
+      await Promise.allSettled(tasks);
+
+      const elapsed = (performance.now() - t0).toFixed(0);
+      document.getElementById('total-time').textContent = `Total load time: ${elapsed}ms`;
+    }
+
+    loadAll();
+  </script>
+</body>
+</html>

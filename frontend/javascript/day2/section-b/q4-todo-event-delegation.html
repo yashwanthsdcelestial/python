@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Q4 — Event Delegation Todo List</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f5f5f5; max-width: 540px; margin: auto; }
+    h2 { margin-bottom: 1rem; }
+    .add-row { display: flex; gap: 8px; margin-bottom: 1.5rem; }
+    #todo-input {
+      flex: 1; padding: 9px 13px; border: 2px solid #d1d5db;
+      border-radius: 7px; font-size: 15px; outline: none;
+    }
+    #todo-input:focus { border-color: #2563eb; }
+    #add-btn {
+      padding: 9px 20px; background: #2563eb; color: white;
+      border: none; border-radius: 7px; font-size: 15px; cursor: pointer;
+    }
+    #add-btn:hover { background: #1d4ed8; }
+    #todo-list { list-style: none; padding: 0; margin: 0; }
+    #todo-list li {
+      display: flex; align-items: center; gap: 10px;
+      background: white; border-radius: 8px; padding: 11px 13px;
+      margin-bottom: 8px; border: 1px solid #e5e7eb;
+      transition: background .15s;
+    }
+    .todo-text {
+      flex: 1; cursor: pointer; font-size: 15px; color: #111827;
+      user-select: none;
+    }
+    li.completed .todo-text {
+      text-decoration: line-through; color: #9ca3af;
+    }
+    .edit-input {
+      flex: 1; border: none; outline: none; font-size: 15px;
+      border-bottom: 2px solid #2563eb; background: transparent;
+    }
+    .delete-btn {
+      background: none; border: none; cursor: pointer;
+      color: #ef4444; font-size: 18px; line-height: 1; padding: 0 4px;
+    }
+    .delete-btn:hover { color: #b91c1c; }
+    .hint { font-size: 12px; color: #9ca3af; margin-bottom: .5rem; }
+    #count { font-size: 13px; color: #6b7280; margin-top: .75rem; }
+  </style>
+</head>
+<body>
+  <h2>Q4 — Event Delegation Todo List</h2>
+  <div class="add-row">
+    <input id="todo-input" type="text" placeholder="Add a new todo..." />
+    <button id="add-btn">Add</button>
+  </div>
+  <p class="hint">Click text to toggle · Double-click to edit · Press Enter or click away to save</p>
+  <ul id="todo-list"></ul>
+  <div id="count"></div>
+
+  <script>
+    let idCounter = 0;
+
+    const input    = document.getElementById('todo-input');
+    const addBtn   = document.getElementById('add-btn');
+    const todoList = document.getElementById('todo-list');
+    const countEl  = document.getElementById('count');
+
+    // ── Create a todo <li> element ──────────────────────────────────────
+    function createTodoElement(text, id) {
+      const li = document.createElement('li');
+      li.dataset.id = id;
+
+      const span = document.createElement('span');
+      span.className   = 'todo-text';
+      span.textContent = text;
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className   = 'delete-btn';
+      deleteBtn.textContent = '×';
+      deleteBtn.setAttribute('aria-label', 'Delete todo');
+      deleteBtn.dataset.action = 'delete';
+
+      li.appendChild(span);
+      li.appendChild(deleteBtn);
+      return li;
+    }
+
+    // ── Add a new todo ──────────────────────────────────────────────────
+    function addTodo() {
+      const text = input.value.trim();
+      if (!text) {
+        input.focus();
+        input.style.borderColor = '#ef4444';
+        setTimeout(() => (input.style.borderColor = ''), 800);
+        return;
+      }
+      const id = ++idCounter;
+      const li = createTodoElement(text, id);
+      todoList.appendChild(li);
+      input.value = '';
+      input.focus();
+      updateCount();
+    }
+
+    // ── Enter inline edit mode ──────────────────────────────────────────
+    function enterEditMode(li) {
+      if (li.classList.contains('editing')) return;
+      li.classList.add('editing');
+      const span = li.querySelector('.todo-text');
+      const currentText = span.textContent;
+
+      const editInput = document.createElement('input');
+      editInput.type      = 'text';
+      editInput.className = 'edit-input';
+      editInput.value     = currentText;
+      editInput.dataset.action = 'edit-input';
+
+      span.replaceWith(editInput);
+      editInput.focus();
+      editInput.select();
+
+      function saveEdit() {
+        const newText = editInput.value.trim() || currentText;
+        const newSpan = document.createElement('span');
+        newSpan.className   = 'todo-text';
+        newSpan.textContent = newText;
+        editInput.replaceWith(newSpan);
+        li.classList.remove('editing');
+      }
+
+      editInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') saveEdit();
+        if (e.key === 'Escape') {
+          editInput.value = currentText;
+          saveEdit();
+        }
+      });
+      editInput.addEventListener('blur', saveEdit);
+    }
+
+    // ── Count display ───────────────────────────────────────────────────
+    function updateCount() {
+      const total     = todoList.querySelectorAll('li').length;
+      const completed = todoList.querySelectorAll('li.completed').length;
+      countEl.textContent = `${total} todo(s) — ${completed} completed`;
+    }
+
+    // ── SINGLE event listener on #todo-list (Event Delegation) ──────────
+    todoList.addEventListener('click', e => {
+      const li = e.target.closest('li');
+      if (!li) return;
+
+      // Delete button
+      if (e.target.dataset.action === 'delete') {
+        li.remove();
+        updateCount();
+        return;
+      }
+
+      // Toggle completed on span click
+      if (e.target.classList.contains('todo-text')) {
+        li.classList.toggle('completed');
+        updateCount();
+        return;
+      }
+    });
+
+    // Double-click to edit
+    todoList.addEventListener('dblclick', e => {
+      const li = e.target.closest('li');
+      if (!li) return;
+      if (e.target.classList.contains('todo-text')) {
+        enterEditMode(li);
+      }
+    });
+
+    // Add button / Enter key
+    addBtn.addEventListener('click', addTodo);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') addTodo();
+    });
+
+    // Seed some items
+    ['Buy groceries', 'Read 20 pages', 'Fix the login bug'].forEach(t => {
+      const id = ++idCounter;
+      todoList.appendChild(createTodoElement(t, id));
+    });
+    updateCount();
+  </script>
+</body>
+</html>

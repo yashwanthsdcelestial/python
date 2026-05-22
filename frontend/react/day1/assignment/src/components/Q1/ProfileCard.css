@@ -1,0 +1,19 @@
+.profile-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  padding: 28px 24px;
+  text-align: center;
+  width: 220px;
+  transition: transform 0.2s;
+}
+.profile-card:hover { transform: translateY(-4px); }
+.profile-avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%; object-fit: cover;
+  border: 3px solid #4f8ef7;
+  margin-bottom: 12px;
+}
+.profile-name { font-size: 1.15rem; margin: 0 0 4px; color: #1a1a2e; }
+.profile-title { font-size: 0.85rem; color: #4f8ef7; margin: 0 0 8px; font-weight: 600; }
+.profile-bio { font-size: 0.82rem; color: #666; margin: 0; }

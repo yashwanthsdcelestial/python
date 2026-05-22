@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Q5 — Event Propagation Playground</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f5f5f5; }
+    h2 { margin-bottom: .5rem; }
+    .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 1.5rem; }
+
+    #grandparent {
+      background: #dbeafe; border: 2px solid #93c5fd;
+      padding: 2rem; border-radius: 12px; text-align: center;
+      position: relative;
+    }
+    #parent {
+      background: #bbf7d0; border: 2px solid #6ee7b7;
+      padding: 1.5rem; border-radius: 8px; display: inline-block;
+    }
+    #child {
+      padding: 10px 24px; background: #2563eb; color: white;
+      border: none; border-radius: 6px; font-size: 15px; cursor: pointer;
+    }
+    #child:hover { background: #1d4ed8; }
+
+    .labels {
+      font-size: 11px; font-weight: 600; color: #374151;
+      position: absolute; top: 6px; left: 10px;
+    }
+
+    .controls {
+      display: flex; flex-direction: column; gap: 10px;
+      margin: 1.5rem 0; background: white; padding: 1rem;
+      border-radius: 8px; border: 1px solid #e5e7eb;
+    }
+    .controls label { font-size: 14px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .controls input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
+
+    .log-area {
+      background: #1e1e1e; color: #d4d4d4; padding: 1rem;
+      border-radius: 8px; font-family: monospace; font-size: 13px;
+      min-height: 200px; max-height: 350px; overflow-y: auto;
+    }
+    .log-line { padding: 1px 0; }
+    .capture { color: #67e8f9; }
+    .bubble  { color: #86efac; }
+    .stopped { color: #fca5a5; }
+    .divider { border-top: 1px solid #374151; margin: 4px 0; }
+    .btn-row { display: flex; gap: 8px; margin-top: .75rem; }
+    button.sec { padding: 6px 14px; border: 1px solid #d1d5db; background: white; border-radius: 6px; font-size: 13px; cursor: pointer; }
+    button.sec:hover { background: #f3f4f6; }
+
+    .phase-legend { display: flex; gap: 1.5rem; font-size: 12px; margin-bottom: .5rem; }
+    .phase-legend span { display: flex; align-items: center; gap: 5px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot.c { background: #67e8f9; }
+    .dot.b { background: #86efac; }
+    .dot.s { background: #fca5a5; }
+  </style>
+</head>
+<body>
+  <h2>Q5 — Event Propagation Playground</h2>
+  <p class="subtitle">Click the button and observe capture → target → bubble phases in real time.</p>
+
+  <div style="display:flex; gap:2rem; flex-wrap:wrap; align-items:flex-start;">
+    <div>
+      <div id="grandparent">
+        <div class="labels">grandparent</div>
+        <div id="parent">
+          <div class="labels">parent</div>
+          <button id="child">Click Me</button>
+        </div>
+      </div>
+
+      <div class="controls">
+        <label>
+          <input type="checkbox" id="stop-prop" />
+          stopPropagation() on parent (bubbling)
+        </label>
+        <label>
+          <input type="checkbox" id="stop-imm" />
+          stopImmediatePropagation() on parent (bubbling)
+        </label>
+        <label>
+          <input type="checkbox" id="prevent-def" />
+          preventDefault() on child
+        </label>
+      </div>
+      <div class="btn-row">
+        <button class="sec" onclick="clearLog()">Clear log</button>
+        <button class="sec" onclick="showExplanation()">Explain differences ↗</button>
+      </div>
+    </div>
+
+    <div style="flex:1; min-width:280px;">
+      <div class="phase-legend">
+        <span><div class="dot c"></div> Capture</span>
+        <span><div class="dot b"></div> Bubble</span>
+        <span><div class="dot s"></div> Stopped</span>
+      </div>
+      <div class="log-area" id="log"></div>
+    </div>
+  </div>
+
+  <script>
+    const logEl    = document.getElementById('log');
+    let   clickNum = 0;
+
+    const phaseNames = ['', 'CAPTURE', 'TARGET', 'BUBBLE'];
+
+    function appendLog(msg, cls) {
+      const div = document.createElement('div');
+      div.className = 'log-line ' + (cls || '');
+      div.textContent = msg;
+      logEl.appendChild(div);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function clearLog() {
+      logEl.innerHTML = '';
+    }
+
+    // ── Capturing phase listeners ──────────────────────────────────────
+    ['grandparent', 'parent', 'child'].forEach(id => {
+      document.getElementById(id).addEventListener('click', e => {
+        const phase = phaseNames[e.eventPhase];
+        appendLog(`[${phase}] ${id} (eventPhase=${e.eventPhase})`, 'capture');
+      }, { capture: true });
+    });
+
+    // ── Bubbling phase listeners ───────────────────────────────────────
+    document.getElementById('grandparent').addEventListener('click', e => {
+      appendLog(`[BUBBLE] grandparent (eventPhase=${e.eventPhase})`, 'bubble');
+    });
+
+    document.getElementById('parent').addEventListener('click', e => {
+      const stopProp = document.getElementById('stop-prop').checked;
+      const stopImm  = document.getElementById('stop-imm').checked;
+
+      appendLog(`[BUBBLE] parent (eventPhase=${e.eventPhase})`, 'bubble');
+
+      if (stopImm) {
+        e.stopImmediatePropagation();
+        appendLog('  → stopImmediatePropagation() called on parent', 'stopped');
+      } else if (stopProp) {
+        e.stopPropagation();
+        appendLog('  → stopPropagation() called on parent', 'stopped');
+      }
+    });
+
+    // Second listener on parent — only fires if stopImmediatePropagation is NOT set
+    document.getElementById('parent').addEventListener('click', e => {
+      appendLog(`[BUBBLE] parent (2nd listener — same element)`, 'bubble');
+    });
+
+    document.getElementById('child').addEventListener('click', e => {
+      const prevent = document.getElementById('prevent-def').checked;
+      appendLog(`[BUBBLE] child (eventPhase=${e.eventPhase})`, 'bubble');
+      if (prevent) {
+        e.preventDefault();
+        appendLog('  → preventDefault() called on child', 'stopped');
+      }
+    });
+
+    // ── Divider between clicks ─────────────────────────────────────────
+    document.getElementById('child').addEventListener('click', () => {
+      clickNum++;
+      const div = document.createElement('div');
+      div.className = 'divider';
+      // Prepend divider before the new batch — actually append after a tiny timeout
+      setTimeout(() => {
+        const d2 = document.createElement('div');
+        d2.className = 'divider';
+        logEl.appendChild(d2);
+      }, 0);
+      const header = document.createElement('div');
+      header.style.cssText = 'color:#facc15;font-weight:bold;margin-top:6px;';
+      header.textContent = `▶ Click #${clickNum}`;
+      logEl.insertBefore(header, logEl.firstChild);
+      // Actually, let's just append at bottom
+    }, true); // capture = true so it runs first
+
+    function showExplanation() {
+      sendPrompt && sendPrompt('Explain the difference between stopPropagation and stopImmediatePropagation in JavaScript events');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Q6 — Registration Form Validation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; background: #f3f4f6; display: flex; justify-content: center; padding: 2rem 1rem; }
+    .card { background: white; border-radius: 12px; padding: 2rem; width: 100%; max-width: 500px; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+    h2 { margin-bottom: 1.5rem; font-size: 22px; }
+    .field { margin-bottom: 1.2rem; }
+    label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 5px; }
+    input {
+      width: 100%; padding: 9px 12px; border: 1.5px solid #d1d5db;
+      border-radius: 7px; font-size: 15px; outline: none; transition: border-color .2s;
+    }
+    input:focus { border-color: #2563eb; }
+    input.valid   { border-color: #16a34a; }
+    input.invalid { border-color: #dc2626; }
+    .error-msg { font-size: 12px; color: #dc2626; margin-top: 4px; min-height: 16px; }
+    .strength-bar-wrap { height: 5px; background: #e5e7eb; border-radius: 3px; margin-top: 6px; }
+    .strength-bar { height: 5px; border-radius: 3px; transition: width .3s, background .3s; width: 0; }
+    .strength-label { font-size: 11px; margin-top: 3px; font-weight: 600; }
+    .strength-label.weak   { color: #dc2626; }
+    .strength-label.medium { color: #d97706; }
+    .strength-label.strong { color: #16a34a; }
+    .submit-btn {
+      width: 100%; padding: 11px; background: #2563eb; color: white;
+      border: none; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: .5rem;
+    }
+    .submit-btn:hover { background: #1d4ed8; }
+    .submit-btn:disabled { background: #93c5fd; cursor: not-allowed; }
+    pre {
+      margin-top: 1.5rem; background: #1e1e1e; color: #86efac;
+      padding: 1rem; border-radius: 8px; font-size: 13px; white-space: pre-wrap;
+      word-break: break-all; display: none;
+    }
+    pre.visible { display: block; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Create Account</h2>
+    <form id="reg-form" novalidate>
+
+      <div class="field">
+        <label for="name">Full Name</label>
+        <input id="name" type="text" placeholder="Alice Smith" autocomplete="name" />
+        <div class="error-msg" id="name-err"></div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email Address</label>
+        <input id="email" type="email" placeholder="alice@example.com" autocomplete="email" />
+        <div class="error-msg" id="email-err"></div>
+      </div>
+
+      <div class="field">
+        <label for="phone">Phone Number</label>
+        <input id="phone" type="tel" placeholder="10-digit number" autocomplete="tel" />
+        <div class="error-msg" id="phone-err"></div>
+      </div>
+
+      <div class="field">
+        <label for="age">Age</label>
+        <input id="age" type="number" placeholder="18–120" min="18" max="120" />
+        <div class="error-msg" id="age-err"></div>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Min 8 chars" autocomplete="new-password" />
+        <div class="strength-bar-wrap"><div class="strength-bar" id="strength-bar"></div></div>
+        <div class="strength-label" id="strength-label"></div>
+        <div class="error-msg" id="password-err"></div>
+      </div>
+
+      <div class="field">
+        <label for="confirm">Confirm Password</label>
+        <input id="confirm" type="password" placeholder="Repeat password" autocomplete="new-password" />
+        <div class="error-msg" id="confirm-err"></div>
+      </div>
+
+      <button type="submit" class="submit-btn">Create Account</button>
+    </form>
+    <pre id="output"></pre>
+  </div>
+
+  <script>
+    // ── Validation rules ──────────────────────────────────────────────
+    const rules = {
+      name(v) {
+        if (!v) return 'Name is required';
+        if (v.length < 2) return 'Minimum 2 characters';
+        if (!/^[a-zA-Z\s]+$/.test(v)) return 'Letters and spaces only';
+        return '';
+      },
+      email(v) {
+        if (!v) return 'Email is required';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return 'Enter a valid email address';
+        return '';
+      },
+      phone(v) {
+        if (!v) return 'Phone is required';
+        if (!/^\d{10}$/.test(v)) return 'Enter exactly 10 digits';
+        return '';
+      },
+      age(v) {
+        if (!v) return 'Age is required';
+        const n = Number(v);
+        if (!Number.isInteger(n) || n < 18 || n > 120) return 'Age must be between 18 and 120';
+        return '';
+      },
+      password(v) {
+        if (!v) return 'Password is required';
+        if (v.length < 8) return 'Minimum 8 characters';
+        if (!/[A-Z]/.test(v)) return 'Include at least one uppercase letter';
+        if (!/[a-z]/.test(v)) return 'Include at least one lowercase letter';
+        if (!/[0-9]/.test(v)) return 'Include at least one number';
+        if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(v)) return 'Include at least one special character';
+        return '';
+      },
+      confirm(v) {
+        const pw = document.getElementById('password').value;
+        if (!v) return 'Please confirm your password';
+        if (v !== pw) return 'Passwords do not match';
+        return '';
+      }
+    };
+
+    // ── Password strength scorer ─────────────────────────────────────
+    function passwordStrength(v) {
+      let score = 0;
+      if (v.length >= 8)  score++;
+      if (v.length >= 12) score++;
+      if (/[A-Z]/.test(v) && /[a-z]/.test(v)) score++;
+      if (/[0-9]/.test(v)) score++;
+      if (/[!@#$%^&*()]/.test(v)) score++;
+      if (score <= 2) return 'weak';
+      if (score <= 3) return 'medium';
+      return 'strong';
+    }
+
+    // ── Set field state ───────────────────────────────────────────────
+    function setFieldState(id, errorMsg) {
+      const input   = document.getElementById(id);
+      const errEl   = document.getElementById(id + '-err');
+      const isEmpty = !input.value.trim();
+
+      input.setCustomValidity(errorMsg);
+      errEl.textContent = errorMsg;
+
+      if (isEmpty) {
+        input.classList.remove('valid', 'invalid');
+      } else if (errorMsg) {
+        input.classList.add('invalid');
+        input.classList.remove('valid');
+      } else {
+        input.classList.add('valid');
+        input.classList.remove('invalid');
+      }
+    }
+
+    // ── Validate a single field ───────────────────────────────────────
+    function validateField(id) {
+      const val = document.getElementById(id).value.trim();
+      const err = rules[id] ? rules[id](val) : '';
+      setFieldState(id, err);
+      return err === '';
+    }
+
+    // ── Blur validation (all fields) ─────────────────────────────────
+    ['name', 'email', 'phone', 'age', 'confirm'].forEach(id => {
+      document.getElementById(id).addEventListener('blur', () => validateField(id));
+      document.getElementById(id).addEventListener('input', () => {
+        if (document.getElementById(id).classList.contains('invalid')) validateField(id);
+      });
+    });
+
+    // ── Real-time password validation + strength ─────────────────────
+    document.getElementById('password').addEventListener('input', () => {
+      const val = document.getElementById('password').value;
+      validateField('password');
+
+      // Re-validate confirm if already touched
+      const confirmInput = document.getElementById('confirm');
+      if (confirmInput.value) validateField('confirm');
+
+      // Strength indicator
+      const barEl   = document.getElementById('strength-bar');
+      const labelEl = document.getElementById('strength-label');
+      if (!val) {
+        barEl.style.width = '0';
+        labelEl.textContent = '';
+        labelEl.className = 'strength-label';
+        return;
+      }
+      const level = passwordStrength(val);
+      const map   = { weak: ['33%', '#dc2626', 'Weak'], medium: ['66%', '#d97706', 'Medium'], strong: ['100%', '#16a34a', 'Strong'] };
+      barEl.style.width      = map[level][0];
+      barEl.style.background = map[level][1];
+      labelEl.textContent    = map[level][2];
+      labelEl.className      = 'strength-label ' + level;
+    });
+
+    // ── Form submit ───────────────────────────────────────────────────
+    document.getElementById('reg-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const fields  = ['name', 'email', 'phone', 'age', 'password', 'confirm'];
+      const allOk   = fields.map(validateField).every(Boolean);
+
+      if (!allOk) {
+        // Focus first invalid field
+        const first = fields.find(id => !document.getElementById(id).checkValidity());
+        if (first) document.getElementById(first).focus();
+        return;
+      }
+
+      // Collect via FormData
+      const fd   = new FormData(e.target);
+      const data = {};
+      ['name', 'email', 'phone', 'age', 'password'].forEach(key => {
+        const el = document.getElementById(key);
+        data[key] = el.value;
+      });
+
+      const output = document.getElementById('output');
+      output.textContent = JSON.stringify({ ...data, password: '***hidden***' }, null, 2);
+      output.classList.add('visible');
+    });
+  </script>
+</body>
+</html>

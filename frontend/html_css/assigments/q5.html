@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS Specificity Challenge</title>
+
+    <style>
+        li {
+            font-size: 16px;
+            color: gray;
+            transition: all 0.2s ease;
+        }
+
+        .highlight {
+            color: blue;
+        }
+
+        #special {
+            color: red;
+            font-weight: bold;
+        }
+
+        li:nth-child(even) {
+            background-color: lightyellow;
+        }
+
+        li:nth-child(odd) {
+            background-color: lightgray;
+        }
+
+        li:first-child {
+            font-size: 20px;
+            text-transform: uppercase;
+        }
+
+        li:last-child {
+            font-style: italic;
+        }
+
+        li:hover {
+            text-decoration: underline;
+            transform: scale(1.02);
+        }
+
+        #special.highlight {
+            background-color: orange;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>CSS Specificity Challenge</h2>
+
+    <ul>
+        <li>Item 1</li>
+        <li class="highlight">Item 2</li>
+        <li>Item 3</li>
+        <li class="highlight">Item 4</li>
+        <li id="special" class="highlight">Item 5</li>
+        <li>Item 6</li>
+        <li class="highlight">Item 7</li>
+        <li>Item 8</li>
+        <li class="highlight">Item 9</li>
+        <li>Item 10</li>
+    </ul>
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CSS Theme Switcher</title>
+
+<style>
+:root {
+    --color-bg: #ffffff;
+    --color-surface: #f4f4f4;
+    --color-text: #222222;
+    --color-text-muted: #666666;
+
+    --color-primary: #4f46e5;
+    --color-primary-hover: #4338ca;
+    --color-accent: #06b6d4;
+
+    --color-border: #dddddd;
+    --color-shadow: rgba(0,0,0,0.1);
+
+    --font-family: Arial, sans-serif;
+    --font-size-base: 16px;
+    --font-size-lg: 20px;
+    --font-size-sm: 14px;
+
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    --border-radius: 10px;
+    --transition-speed: 0.3s;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: #121212;
+        --color-surface: #1e1e1e;
+        --color-text: #ffffff;
+        --color-text-muted: #aaaaaa;
+
+        --color-primary: #818cf8;
+        --color-primary-hover: #6366f1;
+        --color-accent: #22d3ee;
+
+        --color-border: #333333;
+        --color-shadow: rgba(0,0,0,0.5);
+    }
+}
+
+body.dark-theme {
+    --color-bg: #121212;
+    --color-surface: #1e1e1e;
+    --color-text: #ffffff;
+    --color-text-muted: #aaaaaa;
+
+    --color-primary: #818cf8;
+    --color-primary-hover: #6366f1;
+    --color-accent: #22d3ee;
+
+    --color-border: #333333;
+    --color-shadow: rgba(0,0,0,0.5);
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    background: var(--color-bg);
+    color: var(--color-text);
+    transition: background var(--transition-speed), color var(--transition-speed);
+}
+
+nav {
+    background: var(--color-surface);
+    padding: var(--spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border);
+}
+
+button {
+    background: var(--color-primary);
+    color: var(--color-bg);
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background var(--transition-speed);
+}
+
+button:hover {
+    background: var(--color-primary-hover);
+}
+
+.container {
+    padding: var(--spacing-lg);
+}
+
+.card {
+    background: var(--color-surface);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 10px var(--color-shadow);
+    margin-bottom: var(--spacing-md);
+    border: 1px solid var(--color-border);
+}
+
+.card h3 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-sm);
+}
+
+.card p {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+}
+
+footer {
+    background: var(--color-surface);
+    padding: var(--spacing-md);
+    text-align: center;
+    border-top: 1px solid var(--color-border);
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div>My App</div>
+    <button onclick="document.body.classList.toggle('dark-theme')">Toggle Theme</button>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <h3>Card Title</h3>
+        <p>This is a sample card demonstrating theme switching.</p>
+    </div>
+
+    <div class="card">
+        <h3>Another Card</h3>
+        <p>All components respond to CSS variables.</p>
+    </div>
+</div>
+
+<footer>
+    Footer Section
+</footer>
+
+</body>
+</html>

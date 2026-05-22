@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Q16 — Toast Notification System</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; padding: 2rem; background: #f3f4f6; }
+    h2 { margin-bottom: .4rem; }
+    .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 1.5rem; }
+    .demo-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 2rem; }
+    .demo-grid button {
+      padding: 9px 18px; border: none; border-radius: 8px;
+      cursor: pointer; font-size: 14px; color: white;
+    }
+    .btn-success { background: #16a34a; } .btn-success:hover { background: #15803d; }
+    .btn-error   { background: #dc2626; } .btn-error:hover   { background: #b91c1c; }
+    .btn-warning { background: #d97706; } .btn-warning:hover { background: #b45309; }
+    .btn-info    { background: #0284c7; } .btn-info:hover    { background: #0369a1; }
+    .btn-persist { background: #7c3aed; } .btn-persist:hover { background: #6d28d9; }
+    .btn-stress  { background: #374151; } .btn-stress:hover  { background: #1f2937; }
+
+    /* ── Toast Container ──────────────────────────────────── */
+    #toast-container {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      display: flex; flex-direction: column-reverse; gap: 10px;
+      z-index: 9999; max-width: 360px; width: calc(100% - 2rem);
+      pointer-events: none;
+    }
+
+    /* ── Individual Toast ─────────────────────────────────── */
+    .toast {
+      background: white; border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.13);
+      padding: .85rem 1rem .7rem;
+      display: flex; gap: 10px; align-items: flex-start;
+      border-left: 4px solid transparent;
+      pointer-events: all;
+      transform: translateX(120%);
+      opacity: 0;
+      transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .3s ease;
+      overflow: hidden;
+      position: relative;
+    }
+    .toast.entering { transform: translateX(0); opacity: 1; }
+    .toast.leaving  { transform: translateX(120%); opacity: 0; }
+
+    /* Type colors */
+    .toast.success { border-left-color: #16a34a; }
+    .toast.error   { border-left-color: #dc2626; }
+    .toast.warning { border-left-color: #d97706; }
+    .toast.info    { border-left-color: #0284c7; }
+
+    .toast-icon { font-size: 18px; flex-shrink: 0; line-height: 1.3; }
+    .toast-body { flex: 1; }
+    .toast-type { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 2px; }
+    .toast.success .toast-type { color: #16a34a; }
+    .toast.error   .toast-type { color: #dc2626; }
+    .toast.warning .toast-type { color: #d97706; }
+    .toast.info    .toast-type { color: #0284c7; }
+    .toast-msg { font-size: 14px; color: #111827; line-height: 1.4; }
+    .toast-close {
+      background: none; border: none; cursor: pointer;
+      font-size: 16px; color: #9ca3af; padding: 0 2px; flex-shrink: 0;
+      line-height: 1; border-radius: 3px;
+    }
+    .toast-close:hover { color: #374151; }
+
+    /* Progress bar */
+    .toast-progress {
+      position: absolute; bottom: 0; left: 0; height: 3px;
+      transition: width linear; border-radius: 0 2px 2px 0;
+    }
+    .toast.success .toast-progress { background: #16a34a; }
+    .toast.error   .toast-progress { background: #dc2626; }
+    .toast.warning .toast-progress { background: #d97706; }
+    .toast.info    .toast-progress { background: #0284c7; }
+
+    /* Queue count */
+    #queue-badge {
+      position: fixed; bottom: 1.5rem; left: 1.5rem;
+      background: #374151; color: white; border-radius: 8px;
+      font-size: 12px; padding: 6px 12px; display: none; z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <h2>Q16 — Toast Notification System</h2>
+  <p class="subtitle">Singleton · 4 types · Progress bar · Hover-pause · Queue (max 5) · Auto-dismiss</p>
+
+  <div class="demo-grid">
+    <button class="btn-success" onclick="toast.show('File saved successfully!', 'success', 3000)">Success (3s)</button>
+    <button class="btn-error"   onclick="toast.show('Network error occurred.', 'error', 5000)">Error (5s)</button>
+    <button class="btn-warning" onclick="toast.show('Low disk space warning.', 'warning', 4000)">Warning (4s)</button>
+    <button class="btn-info"    onclick="toast.show('New message received.', 'info', 3500)">Info (3.5s)</button>
+    <button class="btn-persist" onclick="toast.show('Persistent: close manually.', 'info', 0)">Persistent (∞)</button>
+    <button class="btn-stress"  onclick="stressTest()">Stress test (8 toasts)</button>
+  </div>
+
+  <div id="toast-container" role="region" aria-label="Notifications" aria-live="polite"></div>
+  <div id="queue-badge"></div>
+
+  <script>
+    // ══════════════════════════════════════════════════════
+    //  Toast — Singleton pattern
+    // ══════════════════════════════════════════════════════
+    class Toast {
+      static _instance = null;
+
+      static getInstance() {
+        if (!Toast._instance) Toast._instance = new Toast();
+        return Toast._instance;
+      }
+
+      constructor() {
+        this.MAX_VISIBLE = 5;
+        this.container   = document.getElementById('toast-container');
+        this.queueBadge  = document.getElementById('queue-badge');
+        this._visible    = [];  // active toast objects
+        this._queue      = [];  // { message, type, duration }
+      }
+
+      // ── Public: show a toast ─────────────────────────────
+      show(message, type = 'info', duration = 3000) {
+        if (this._visible.length >= this.MAX_VISIBLE) {
+          this._queue.push({ message, type, duration });
+          this._updateQueueBadge();
+          return;
+        }
+        this._render(message, type, duration);
+      }
+
+      _render(message, type, duration) {
+        const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
+        const labels = { success: 'Success', error: 'Error', warning: 'Warning', info: 'Info' };
+
+        // ── Build toast DOM ─────────────────────────────────
+        const el = document.createElement('div');
+        el.className = `toast ${type}`;
+        el.setAttribute('role', 'alert');
+
+        const icon = document.createElement('span');
+        icon.className   = 'toast-icon';
+        icon.textContent = icons[type] || 'ℹ';
+
+        const body = document.createElement('div');
+        body.className = 'toast-body';
+
+        const typeEl = document.createElement('div');
+        typeEl.className   = 'toast-type';
+        typeEl.textContent = labels[type] || type;
+
+        const msgEl = document.createElement('div');
+        msgEl.className   = 'toast-msg';
+        msgEl.textContent = message;
+
+        body.appendChild(typeEl);
+        body.appendChild(msgEl);
+
+        const closeBtn = document.createElement('button');
+        closeBtn.className   = 'toast-close';
+        closeBtn.textContent = '×';
+        closeBtn.setAttribute('aria-label', 'Close notification');
+
+        const progress = document.createElement('div');
+        progress.className = 'toast-progress';
+        progress.style.width = '100%';
+
+        el.appendChild(icon);
+        el.appendChild(body);
+        el.appendChild(closeBtn);
+        el.appendChild(progress);
+        this.container.appendChild(el);
+
+        // ── State for this toast ────────────────────────────
+        const toastObj = { el, timerId: null, startTime: null, remaining: duration, paused: false };
+        this._visible.push(toastObj);
+
+        // ── Slide in ────────────────────────────────────────
+        requestAnimationFrame(() => el.classList.add('entering'));
+
+        // ── Close logic ──────────────────────────────────────
+        const dismiss = () => this._dismiss(toastObj);
+        closeBtn.addEventListener('click', dismiss);
+
+        // ── Auto-dismiss + progress bar ─────────────────────
+        if (duration > 0) {
+          progress.style.transition = `width ${duration}ms linear`;
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => { progress.style.width = '0%'; });
+          });
+
+          // ── Hover: pause timer ──────────────────────────────
+          el.addEventListener('mouseenter', () => {
+            if (toastObj.timerId) {
+              clearTimeout(toastObj.timerId);
+              toastObj.remaining -= Date.now() - toastObj.startTime;
+              toastObj.paused = true;
+              // Pause CSS transition
+              const computed = getComputedStyle(progress).width;
+              progress.style.transition = 'none';
+              progress.style.width = computed;
+            }
+          });
+
+          el.addEventListener('mouseleave', () => {
+            if (toastObj.paused) {
+              toastObj.paused = false;
+              toastObj.startTime = Date.now();
+              // Resume progress bar
+              requestAnimationFrame(() => {
+                progress.style.transition = `width ${toastObj.remaining}ms linear`;
+                progress.style.width = '0%';
+              });
+              toastObj.timerId = setTimeout(dismiss, toastObj.remaining);
+            }
+          });
+
+          toastObj.startTime = Date.now();
+          toastObj.timerId   = setTimeout(dismiss, duration);
+        } else {
+          // Persistent: remove progress bar
+          progress.remove();
+        }
+      }
+
+      _dismiss(toastObj) {
+        clearTimeout(toastObj.timerId);
+        toastObj.el.classList.add('leaving');
+        setTimeout(() => {
+          toastObj.el.remove();
+          const idx = this._visible.indexOf(toastObj);
+          if (idx > -1) this._visible.splice(idx, 1);
+          // Dequeue next
+          if (this._queue.length > 0) {
+            const next = this._queue.shift();
+            this._updateQueueBadge();
+            this._render(next.message, next.type, next.duration);
+          }
+        }, 320);
+      }
+
+      _updateQueueBadge() {
+        const n = this._queue.length;
+        this.queueBadge.textContent = `+${n} queued`;
+        this.queueBadge.style.display = n > 0 ? 'block' : 'none';
+      }
+    }
+
+    // ── Singleton instance ────────────────────────────────
+    const toast = Toast.getInstance();
+
+    // ── Stress test ───────────────────────────────────────
+    function stressTest() {
+      const msgs = [
+        ['Upload complete!',         'success', 3000],
+        ['Auth token expired',       'error',   4000],
+        ['Cache cleared',            'info',    2500],
+        ['Low memory',               'warning', 3500],
+        ['5 new notifications',      'info',    3000],
+        ['Backup failed',            'error',   5000],
+        ['Settings saved',           'success', 2000],
+        ['Reminder: standup at 10am','warning', 0],
+      ];
+      msgs.forEach(([msg, type, dur], i) => {
+        setTimeout(() => toast.show(msg, type, dur), i * 300);
+      });
+    }
+  </script>
+</body>
+</html>

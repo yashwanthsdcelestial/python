@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Equal Height Cards</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+    }
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .card {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 calc(33.33% - 20px);
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+
+    .image {
+        height: 150px;
+        background: #ccc;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        padding: 15px;
+        flex-grow: 1;
+    }
+
+    .title {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .description {
+        flex-grow: 1;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .price {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .btn {
+        padding: 10px;
+        background: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    @media (max-width: 1024px) {
+        .card {
+            flex: 1 1 calc(50% - 20px);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .card {
+            flex: 1 1 100%;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+        <div class="image"></div>
+        <div class="content">
+            <div class="title">Product 1</div>
+            <div class="description">Short description.</div>
+            <div class="price">$10</div>
+            <button class="btn">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image"></div>
+        <div class="content">
+            <div class="title">Product 2</div>
+            <div class="description">This is a slightly longer description to demonstrate equal height behavior.</div>
+            <div class="price">$20</div>
+            <button class="btn">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image"></div>
+        <div class="content">
+            <div class="title">Product 3</div>
+            <div class="description">Medium length description for testing layout consistency.</div>
+            <div class="price">$30</div>
+            <button class="btn">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image"></div>
+        <div class="content">
+            <div class="title">Product 4</div>
+            <div class="description">Another product with varying content size.</div>
+            <div class="price">$40</div>
+            <button class="btn">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image"></div>
+        <div class="content">
+            <div class="title">Product 5</div>
+            <div class="description">Short description again.</div>
+            <div class="price">$50</div>
+            <button class="btn">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="image"></div>
+        <div class="content">
+            <div class="title">Product 6</div>
+            <div class="description">This product has a much longer description than others to ensure the button stays at the bottom using flex-grow.</div>
+            <div class="price">$60</div>
+            <button class="btn">Add to Cart</button>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

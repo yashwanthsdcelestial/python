@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Q13 — Debounce Live Search</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; padding: 2rem; background: #f3f4f6; }
+    h2 { margin-bottom: .4rem; }
+    .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 1.5rem; }
+
+    .search-wrap {
+      position: relative; max-width: 480px;
+    }
+    .search-icon {
+      position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+      color: #9ca3af; font-size: 16px; pointer-events: none;
+    }
+    #search-input {
+      width: 100%; padding: 11px 40px 11px 40px;
+      border: 2px solid #d1d5db; border-radius: 10px;
+      font-size: 15px; outline: none; transition: border-color .2s;
+      background: white;
+    }
+    #search-input:focus { border-color: #2563eb; }
+    .spinner-icon {
+      position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
+      width: 18px; height: 18px; border: 2px solid #e5e7eb;
+      border-top-color: #2563eb; border-radius: 50%;
+      animation: spin .7s linear infinite; display: none;
+    }
+    .spinner-icon.visible { display: block; }
+    @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+    /* Dropdown */
+    #dropdown {
+      position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+      background: white; border: 1px solid #e5e7eb; border-radius: 10px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.12); z-index: 50;
+      max-height: 340px; overflow-y: auto; display: none;
+    }
+    #dropdown.open { display: block; }
+    .dropdown-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px; cursor: pointer; transition: background .1s;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .dropdown-item:last-child { border-bottom: none; }
+    .dropdown-item:hover { background: #f0f9ff; }
+    .avatar-sm {
+      width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+      background: #dbeafe; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600; color: #1d4ed8;
+    }
+    .item-name { font-size: 14px; font-weight: 500; color: #111827; }
+    .item-email { font-size: 12px; color: #6b7280; }
+    .no-results { padding: 1.5rem; text-align: center; color: #9ca3af; font-size: 14px; }
+    mark { background: #fef08a; color: inherit; border-radius: 2px; padding: 0 1px; }
+
+    /* Stats bar */
+    .stats {
+      max-width: 480px; margin-top: .5rem; font-size: 12px; color: #6b7280;
+      display: flex; gap: 1rem;
+    }
+    .stats span { display: flex; align-items: center; gap: 4px; }
+
+    /* Debug log */
+    .debug-log {
+      max-width: 480px; margin-top: 1.5rem;
+      background: #1e1e1e; color: #d4d4d4; padding: .75rem;
+      border-radius: 8px; font-family: monospace; font-size: 12px;
+      max-height: 200px; overflow-y: auto;
+    }
+    .log-debounce { color: #93c5fd; }
+    .log-fetch    { color: #86efac; }
+    .log-abort    { color: #fca5a5; }
+    .log-result   { color: #fde68a; }
+  </style>
+</head>
+<body>
+  <h2>Q13 — Debounce + Live Search</h2>
+  <p class="subtitle">300ms debounce · AbortController cancels in-flight requests · Highlights matches</p>
+
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input
+      id="search-input"
+      type="text"
+      placeholder="Search users… (min 2 chars)"
+      autocomplete="off"
+      aria-label="Search users"
+      aria-expanded="false"
+      aria-haspopup="listbox"
+    />
+    <div class="spinner-icon" id="spinner"></div>
+    <div id="dropdown" role="listbox" aria-label="Search results"></div>
+  </div>
+
+  <div class="stats">
+    <span id="stat-query">Query: —</span>
+    <span id="stat-count">Results: —</span>
+    <span id="stat-time">Time: —</span>
+  </div>
+
+  <div class="debug-log" id="debug-log">Waiting for input…</div>
+
+  <script>
+    // ══════════════════════════════════════════════════════
+    //  debounce — implemented from scratch (no library)
+    // ══════════════════════════════════════════════════════
+    function debounce(fn, delay) {
+      let timerId = null;
+      return function(...args) {
+        if (timerId) {
+          clearTimeout(timerId);
+          dlog(`Debounce reset (${delay}ms timer restarted)`, 'log-debounce');
+        }
+        timerId = setTimeout(() => {
+          timerId = null;
+          fn.apply(this, args);
+        }, delay);
+      };
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  State
+    // ══════════════════════════════════════════════════════
+    let currentController = null;   // AbortController for in-flight request
+    const BASE = 'https://jsonplaceholder.typicode.com';
+
+    // ── DOM refs ──────────────────────────────────────────
+    const input    = document.getElementById('search-input');
+    const dropdown = document.getElementById('dropdown');
+    const spinner  = document.getElementById('spinner');
+
+    // ── Debug logger ──────────────────────────────────────
+    function dlog(msg, cls = '') {
+      const logEl = document.getElementById('debug-log');
+      const div   = document.createElement('div');
+      div.className   = cls;
+      div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+      logEl.appendChild(div);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    // ── Highlight matching text ───────────────────────────
+    function highlight(text, query) {
+      if (!query) return document.createTextNode(text);
+      const idx = text.toLowerCase().indexOf(query.toLowerCase());
+      if (idx === -1) return document.createTextNode(text);
+
+      const frag  = document.createDocumentFragment();
+      frag.appendChild(document.createTextNode(text.slice(0, idx)));
+      const mark  = document.createElement('mark');
+      mark.textContent = text.slice(idx, idx + query.length);
+      frag.appendChild(mark);
+      frag.appendChild(document.createTextNode(text.slice(idx + query.length)));
+      return frag;
+    }
+
+    // ── Show dropdown ─────────────────────────────────────
+    function showDropdown(users, query, elapsedMs) {
+      dropdown.innerHTML = '';
+      spinner.classList.remove('visible');
+
+      if (users.length === 0) {
+        const msg = document.createElement('div');
+        msg.className   = 'no-results';
+        msg.textContent = `No users found for "${query}"`;
+        dropdown.appendChild(msg);
+      } else {
+        const frag = document.createDocumentFragment();
+        users.forEach(u => {
+          const item = document.createElement('div');
+          item.className = 'dropdown-item';
+          item.setAttribute('role', 'option');
+
+          const initials = u.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+          const av = document.createElement('div');
+          av.className   = 'avatar-sm';
+          av.textContent = initials;
+
+          const info = document.createElement('div');
+          const name = document.createElement('div');
+          name.className = 'item-name';
+          name.appendChild(highlight(u.name, query));
+
+          const email = document.createElement('div');
+          email.className = 'item-email';
+          email.appendChild(highlight(u.email, query));
+
+          info.appendChild(name);
+          info.appendChild(email);
+          item.appendChild(av);
+          item.appendChild(info);
+          frag.appendChild(item);
+        });
+        dropdown.appendChild(frag);
+      }
+
+      dropdown.classList.add('open');
+      input.setAttribute('aria-expanded', 'true');
+
+      document.getElementById('stat-query').textContent  = `Query: "${query}"`;
+      document.getElementById('stat-count').textContent  = `Results: ${users.length}`;
+      document.getElementById('stat-time').textContent   = `Time: ${elapsedMs}ms`;
+
+      dlog(`Rendered ${users.length} result(s) for "${query}" in ${elapsedMs}ms`, 'log-result');
+    }
+
+    function closeDropdown() {
+      dropdown.classList.remove('open');
+      dropdown.innerHTML = '';
+      input.setAttribute('aria-expanded', 'false');
+    }
+
+    // ── Fetch users (with AbortController) ────────────────
+    async function fetchUsers(query) {
+      // Cancel any previous in-flight request
+      if (currentController) {
+        currentController.abort();
+        dlog(`Aborted previous request for "${query}"`, 'log-abort');
+      }
+
+      currentController = new AbortController();
+      spinner.classList.add('visible');
+      const t0 = performance.now();
+
+      dlog(`Fetching /users?q=${query}…`, 'log-fetch');
+
+      try {
+        const res = await fetch(`${BASE}/users`, { signal: currentController.signal });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const all   = await res.json();
+        const q     = query.toLowerCase();
+
+        // Client-side filter (JSONPlaceholder ignores ?q param)
+        const users = all.filter(u =>
+          u.name.toLowerCase().includes(q) ||
+          u.email.toLowerCase().includes(q) ||
+          u.username.toLowerCase().includes(q)
+        );
+
+        const elapsed = Math.round(performance.now() - t0);
+        showDropdown(users, query, elapsed);
+        currentController = null;
+      } catch (err) {
+        if (err.name === 'AbortError') return; // Intentionally cancelled
+        spinner.classList.remove('visible');
+        dlog(`Error: ${err.message}`, 'log-abort');
+      }
+    }
+
+    // ── Debounced search handler (300ms) ──────────────────
+    const debouncedSearch = debounce(async (query) => {
+      if (query.length < 2) {
+        closeDropdown();
+        spinner.classList.remove('visible');
+        return;
+      }
+      dlog(`Debounce fired → searching "${query}"`, 'log-debounce');
+      await fetchUsers(query);
+    }, 300);
+
+    // ── Input listener ────────────────────────────────────
+    input.addEventListener('input', () => {
+      const val = input.value.trim();
+      if (!val) {
+        closeDropdown();
+        if (currentController) { currentController.abort(); currentController = null; }
+        spinner.classList.remove('visible');
+        return;
+      }
+      debouncedSearch(val);
+    });
+
+    // Close on outside click
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.search-wrap')) closeDropdown();
+    });
+
+    // Close on Escape
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closeDropdown(); input.blur(); }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Q1 — Dynamic Table Builder</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f5f5f5; }
+    h2 { margin-bottom: 1rem; }
+    table { border-collapse: collapse; width: 100%; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    th { background: #2563eb; color: white; padding: 12px 16px; text-align: left; font-weight: 600; }
+    td { padding: 12px 16px; border-bottom: 1px solid #e5e7eb; }
+    tr.even td { background: #f9fafb; }
+    tr.odd td { background: #ffffff; }
+    tr:hover td { background: #eff6ff; }
+    #app { margin-top: 1rem; }
+    #log { margin-top: 1rem; background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 13px; white-space: pre; }
+  </style>
+</head>
+<body>
+  <h2>Q1 — Dynamic Table Builder</h2>
+  <div id="app"></div>
+  <div id="log"></div>
+
+  <script>
+    /**
+     * buildTable(containerId, data, columns)
+     * - Uses document.createElement (no innerHTML)
+     * - Zebra striping via classList
+     * - data-index on each <tr>
+     * - Optional format function per column
+     * - DocumentFragment for efficient DOM insertion
+     */
+    function buildTable(containerId, data, columns) {
+      const container = document.getElementById(containerId);
+      if (!container) return console.error(`Container #${containerId} not found`);
+
+      // Remove any existing table
+      container.innerHTML = '';
+
+      const table = document.createElement('table');
+
+      // --- THEAD ---
+      const thead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+
+      columns.forEach(col => {
+        const th = document.createElement('th');
+        th.textContent = col.label;
+        headerRow.appendChild(th);
+      });
+
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      // --- TBODY using DocumentFragment ---
+      const tbody = document.createElement('tbody');
+      const fragment = document.createDocumentFragment();
+
+      data.forEach((item, index) => {
+        const tr = document.createElement('tr');
+
+        // Zebra striping
+        tr.classList.add(index % 2 === 0 ? 'even' : 'odd');
+
+        // Store original data index
+        tr.dataset.index = index;
+
+        columns.forEach(col => {
+          const td = document.createElement('td');
+          const rawValue = item[col.key];
+          // Apply optional format function
+          td.textContent = col.format ? col.format(rawValue) : rawValue;
+          tr.appendChild(td);
+        });
+
+        fragment.appendChild(tr);
+      });
+
+      tbody.appendChild(fragment);
+      table.appendChild(tbody);
+      container.appendChild(table);
+
+      log(`Table built: ${data.length} rows, ${columns.length} columns`);
+      log(`Row data-index values: ${[...tbody.querySelectorAll('tr')].map(r => r.dataset.index).join(', ')}`);
+    }
+
+    // --- Helper log ---
+    function log(msg) {
+      document.getElementById('log').textContent += msg + '\n';
+    }
+
+    // --- Demo ---
+    const users = [
+      { name: "Alice",  age: 25, role: "Developer", salary: 95000 },
+      { name: "Bob",    age: 30, role: "Designer",  salary: 88000 },
+      { name: "Carol",  age: 28, role: "Manager",   salary: 110000 },
+      { name: "David",  age: 35, role: "DevOps",    salary: 105000 },
+      { name: "Emma",   age: 26, role: "QA",        salary: 78000 },
+    ];
+
+    const columns = [
+      { key: "name",   label: "Full Name" },
+      { key: "age",    label: "Age",      format: (val) => `${val} years` },
+      { key: "role",   label: "Position" },
+      { key: "salary", label: "Salary",   format: (val) => `$${val.toLocaleString()}` },
+    ];
+
+    buildTable("app", users, columns);
+  </script>
+</body>
+</html>

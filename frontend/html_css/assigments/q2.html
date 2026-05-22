@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+</head>
+<body>
+
+<form>
+
+    <fieldset>
+        <legend>Personal Information</legend>
+
+        <label for="fullname">Full Name</label>
+        <input 
+            type="text" 
+            id="fullname" 
+            name="fullname" 
+            required 
+            minlength="3">
+
+        <label for="email">Email</label>
+        <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required>
+
+        <label for="password">Password</label>
+        <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            required 
+            minlength="8"
+            pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}">
+
+        <label for="confirm-password">Confirm Password</label>
+        <input 
+            type="password" 
+            id="confirm-password" 
+            name="confirm-password" 
+            required 
+            minlength="8">
+
+        <label for="dob">Date of Birth</label>
+        <input 
+            type="date" 
+            id="dob" 
+            name="dob" 
+            required 
+            max="2026-04-01">
+
+        <label for="phone">Phone Number</label>
+        <input 
+            type="tel" 
+            id="phone" 
+            name="phone" 
+            required 
+            pattern="[0-9]{10}">
+
+    </fieldset>
+
+    <fieldset>
+        <legend>Gender</legend>
+
+        <input type="radio" id="male" name="gender" value="male" required>
+        <label for="male">Male</label>
+
+        <input type="radio" id="female" name="gender" value="female">
+        <label for="female">Female</label>
+
+        <input type="radio" id="other" name="gender" value="other">
+        <label for="other">Other</label>
+
+    </fieldset>
+
+    <fieldset>
+        <legend>Skills</legend>
+
+        <input type="checkbox" id="html" name="skills" value="html" required>
+        <label for="html">HTML</label>
+
+        <input type="checkbox" id="css" name="skills" value="css">
+        <label for="css">CSS</label>
+
+        <input type="checkbox" id="javascript" name="skills" value="javascript">
+        <label for="javascript">JavaScript</label>
+
+        <input type="checkbox" id="python" name="skills" value="python">
+        <label for="python">Python</label>
+
+    </fieldset>
+
+    <fieldset>
+        <legend>Additional Information</legend>
+
+        <label for="bio">Bio</label>
+        <textarea 
+            id="bio" 
+            name="bio" 
+            maxlength="500"></textarea>
+
+        <label for="profile-pic">Profile Picture</label>
+        <input 
+            type="file" 
+            id="profile-pic" 
+            name="profile-pic" 
+            accept=".jpg, .png, .webp">
+
+    </fieldset>
+
+    <button type="submit">Register</button>
+
+</form>
+
+</body>
+</html>

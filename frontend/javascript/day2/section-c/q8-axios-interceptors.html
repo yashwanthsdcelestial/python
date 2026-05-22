@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Q8 — Axios API Client with Interceptors</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f5f5f5; }
+    h2 { margin-bottom: .5rem; }
+    .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 1.5rem; }
+    .btn-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
+    button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; color: white; }
+    .get    { background: #059669; } .get:hover    { background: #047857; }
+    .post   { background: #2563eb; } .post:hover   { background: #1d4ed8; }
+    .put    { background: #d97706; } .put:hover    { background: #b45309; }
+    .delete { background: #dc2626; } .delete:hover { background: #b91c1c; }
+    .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media(max-width:640px){ .panels { grid-template-columns: 1fr; } }
+    .panel { background: white; border-radius: 8px; padding: 1rem; border: 1px solid #e5e7eb; }
+    .panel h3 { font-size: 14px; font-weight: 600; margin-bottom: .5rem; }
+    pre { background: #1e1e1e; color: #d4d4d4; padding: .75rem; border-radius: 6px; font-size: 12px; overflow: auto; max-height: 320px; white-space: pre-wrap; }
+    .log-line { font-size: 12px; padding: 2px 0; border-bottom: 1px solid #f3f4f6; }
+    .log-req  { color: #2563eb; }
+    .log-res  { color: #059669; }
+    .log-err  { color: #dc2626; }
+    .log-warn { color: #d97706; }
+    .log-retry{ color: #7c3aed; }
+    #interceptor-log { font-family: monospace; font-size: 12px; background: #1e1e1e; padding: .75rem; border-radius: 6px; max-height: 280px; overflow-y: auto; color: #d4d4d4; }
+    .token-row { display: flex; gap: 8px; margin-bottom: 1rem; align-items: center; }
+    .token-row input { flex: 1; padding: 7px 10px; border: 1.5px solid #d1d5db; border-radius: 6px; font-size: 13px; outline: none; }
+    .token-row input:focus { border-color: #2563eb; }
+    .token-row button { padding: 7px 14px; background: #374151; }
+  </style>
+</head>
+<body>
+  <h2>Q8 — Axios API Client with Interceptors</h2>
+  <p class="subtitle">ApiService class with request/response interceptors + auto-retry on 5xx.</p>
+
+  <div class="token-row">
+    <input id="token-input" type="text" value="my-jwt-token-123" placeholder="Auth token" />
+    <button onclick="setToken()">Set Token</button>
+  </div>
+
+  <div class="btn-grid">
+    <button class="get"    onclick="runApi('get')">GET /posts?_limit=3</button>
+    <button class="post"   onclick="runApi('post')">POST /posts</button>
+    <button class="put"    onclick="runApi('put')">PUT /posts/1</button>
+    <button class="delete" onclick="runApi('delete')">DELETE /posts/1</button>
+  </div>
+
+  <div class="panels">
+    <div class="panel">
+      <h3>Interceptor Log</h3>
+      <div id="interceptor-log">Ready. Set a token and fire a request.</div>
+    </div>
+    <div class="panel">
+      <h3>Response</h3>
+      <pre id="response">—</pre>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.2/axios.min.js"></script>
+  <script>
+    // ── ApiService class ────────────────────────────────────────────────
+    class ApiService {
+      constructor(baseURL) {
+        this._token   = null;
+        this._retries = 2;
+
+        this.client = axios.create({
+          baseURL,
+          timeout: 10000,
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        this._addRequestInterceptor();
+        this._addResponseInterceptor();
+      }
+
+      setAuthToken(token) {
+        this._token = token;
+        ilog(`Token set: Bearer ${token}`, 'warn');
+      }
+
+      // ── Request interceptor: attach auth header ─────────────────────
+      _addRequestInterceptor() {
+        this.client.interceptors.request.use(config => {
+          if (this._token) {
+            config.headers['Authorization'] = `Bearer ${this._token}`;
+          }
+          config.metadata = { startTime: Date.now(), retryCount: config.retryCount || 0 };
+          ilog(`→ REQ  ${config.method?.toUpperCase()} ${config.url}${this._token ? ' (auth ✓)' : ' (no auth)'}`, 'req');
+          return config;
+        }, err => Promise.reject(err));
+      }
+
+      // ── Response interceptor: handle errors + retry ──────────────────
+      _addResponseInterceptor() {
+        this.client.interceptors.response.use(
+          res => {
+            const elapsed = Date.now() - (res.config.metadata?.startTime || 0);
+            ilog(`← RES  ${res.status} ${res.config.url} (${elapsed}ms)`, 'res');
+            return { data: res.data, status: res.status };
+          },
+          async err => {
+            const { config, response } = err;
+            const status = response?.status;
+            const elapsed = config?.metadata ? Date.now() - config.metadata.startTime : 0;
+
+            // 401 — Unauthorized
+            if (status === 401) {
+              ilog(`✗ 401 Unauthorized — redirect to login`, 'err');
+              console.warn('Unauthorized — redirect to login');
+              return Promise.reject(this._enrichError(err, 'Unauthorized. Please log in again.'));
+            }
+
+            // 404 — Not Found
+            if (status === 404) {
+              ilog(`✗ 404 Not Found: ${config.url}`, 'err');
+              return Promise.reject(this._enrichError(err, `Resource not found: ${config.url}`));
+            }
+
+            // 5xx — Server error: retry up to _retries times
+            if (status >= 500 && config) {
+              const retryCount = config.metadata?.retryCount || 0;
+              if (retryCount < this._retries) {
+                ilog(`↺ RETRY ${retryCount + 1}/${this._retries} for ${config.url} (${status})`, 'retry');
+                config.metadata.retryCount = retryCount + 1;
+                config.retryCount = retryCount + 1;
+                await new Promise(r => setTimeout(r, 500 * (retryCount + 1)));
+                return this.client(config);
+              }
+              ilog(`✗ ${status} Server Error after ${this._retries} retries`, 'err');
+            }
+
+            ilog(`✗ ERR  ${status || 'NETWORK'} ${config?.url} (${elapsed}ms)`, 'err');
+            return Promise.reject(this._enrichError(err));
+          }
+        );
+      }
+
+      _enrichError(err, customMsg) {
+        return {
+          message:       customMsg || err.message,
+          status:        err.response?.status,
+          originalError: err,
+        };
+      }
+
+      async get(path, params = {}) {
+        return this.client.get(path, { params });
+      }
+
+      async post(path, body) {
+        return this.client.post(path, body);
+      }
+
+      async put(path, body) {
+        return this.client.put(path, body);
+      }
+
+      async delete(path) {
+        return this.client.delete(path);
+      }
+    }
+
+    // ── Interceptor log helper ───────────────────────────────────────
+    const logEl = document.getElementById('interceptor-log');
+    function ilog(msg, type = '') {
+      const d = document.createElement('div');
+      d.className = 'log-line log-' + type;
+      d.textContent = msg;
+      logEl.appendChild(d);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    // ── Init ──────────────────────────────────────────────────────────
+    const api = new ApiService('https://jsonplaceholder.typicode.com');
+    api.setAuthToken(document.getElementById('token-input').value);
+
+    function setToken() {
+      const v = document.getElementById('token-input').value.trim();
+      if (v) api.setAuthToken(v);
+    }
+
+    // ── Run demo ─────────────────────────────────────────────────────
+    async function runApi(action) {
+      document.getElementById('response').textContent = '⏳ Loading…';
+      try {
+        let result;
+        if (action === 'get')    result = await api.get('/posts', { _limit: 3 });
+        if (action === 'post')   result = await api.post('/posts', { title: 'Hello', body: 'World', userId: 1 });
+        if (action === 'put')    result = await api.put('/posts/1', { title: 'Updated Title', userId: 1 });
+        if (action === 'delete') result = await api.delete('/posts/1');
+        document.getElementById('response').textContent = JSON.stringify(result, null, 2);
+      } catch (err) {
+        document.getElementById('response').textContent = JSON.stringify(err, null, 2);
+      }
+    }
+  </script>
+</body>
+</html>
